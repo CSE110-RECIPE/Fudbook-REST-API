@@ -1,0 +1,27 @@
+{
+  "name": "fudbook-restapi",
+  "version": "1.0.0",
+  "description": "This service process inflow and divert it with multiple outflow",
+  "main": "index.js",
+  "scripts": {
+    "start": "./admin_script.sh development",
+    "serve": "./admin_script.sh production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CSE110-RECIPE/Fudbook-REST-API.git"
+  },
+  "keywords": [
+    "Nodejs",
+    "Expressjs",
+    "RESTful",
+    "API"
+  ],
+  "author": "RECIPE",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase-admin": "^8.10.0",
+    "nodemon": "^2.0.3"
+  }
+}
