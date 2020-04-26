@@ -23,12 +23,16 @@ dbRef.child('recipe').once('value').then(snapshot => {
     recipeObj = snapshot.val();
 });
 
+/** Initialize data structure */
+
 /**
  * POST Request
  * Returns the feed recipes
  */
 app.post('/', (req, res) => {
-    
+    // TODO: Implement data structure search
+    // req.body.exclude_filter;
+    // req.body.include_filter;
     res.end(JSON.stringify(recipeObj));
 }) 
 
