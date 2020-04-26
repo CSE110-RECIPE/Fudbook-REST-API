@@ -82,7 +82,16 @@ app.get('/explore', (req, res) => {
  * GET Request
  * Returns the recipes in the given book
  */
-app.get('/book/:id', (req, res) => {
+app.get('/book', (req, res) => {
+    console.log(req.body.name);
+    res.end('<h1>This is a GET response</h1>');
+});
+
+/**
+ * GET Request
+ * Returns the books in bookshelf
+ */
+app.get('/bookshelf', (req, res) => {
     console.log(req.body.name);
     res.end('<h1>This is a GET response</h1>');
 });
