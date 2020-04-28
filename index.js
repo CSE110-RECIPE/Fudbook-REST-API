@@ -32,6 +32,7 @@ app.use(express.urlencoded());
 /**
  * GET Request
  * Returns the feed recipes
+ * get the recipe of the day done by the algorithm
  */
 app.get('/feed', (req, res) => {
     /**
@@ -48,7 +49,8 @@ app.get('/feed', (req, res) => {
         header: {},
         body: {
             exclude_filter: req.body.exclude_filter,
-            include_filter: req.body.include_filter
+            include_filter: req.body.include_filter,
+            type: 'Feed'
         }
     };
 
@@ -74,8 +76,33 @@ app.get('/feed', (req, res) => {
  * Returns the explore recipes
  */
 app.get('/explore', (req, res) => {
-    console.log(req.body.name);
-    res.end('');
+    //console.log(req.body.name);
+    //res.end('');
+    const options = {
+        method: 'POST',
+        header: {},
+        body: {
+            exclude_filter: req.body.exclude_filter,
+            include_filter: req.body.include_filter,
+            type: 'Explore'
+        }
+    };
+
+    const getRecipe = async () => {
+        try {
+            const recipes = await fetch(`http://localhost:${process.env.PORT1}`,
+                                        options)
+                                    .then(fres => fres.json());
+
+            // TODO: format data returning 
+            
+            res.send(JSON.stringify(recipes));
+        } catch(error) {
+            res.end(error.message);
+        }
+    };
+
+    getRecipe();
 });
 
 /**
@@ -83,8 +110,29 @@ app.get('/explore', (req, res) => {
  * Returns the recipes in the given book
  */
 app.get('/book', (req, res) => {
-    console.log(req.body.name);
-    res.end('<h1>This is a GET response</h1>');
+    const options = {
+        method: 'POST',
+        header: {},
+        body: {
+            book_id: req.body.id
+        }
+    };
+
+    const getBook = async () => {
+        try {
+            const books = await fetch(`http://localhost:${process.env.PORT2}`,
+                                        options)
+                                    .then(fres => fres.json());
+
+            // TODO: format data returning 
+            
+            res.send(JSON.stringify(books));
+        } catch(error) {
+            res.end(error.message);
+        }
+    };
+
+    getBook();
 });
 
 /**
@@ -92,9 +140,32 @@ app.get('/book', (req, res) => {
  * Returns the books in bookshelf
  */
 app.get('/bookshelf', (req, res) => {
-    console.log(req.body.name);
-    res.end('<h1>This is a GET response</h1>');
+    const options = {
+        method: 'POST',
+        header: {},
+        body: {
+            bookshelf: req.body.name
+        }
+    };
+
+    const getBookshelf = async () => {
+        try {
+            const bookshelf = await fetch(`http://localhost:${process.env.PORT3}`,
+                                        options)
+                                    .then(fres => fres.json());
+
+            // TODO: format data returning 
+            
+            res.send(JSON.stringify(bookshelf));
+        } catch(error) {
+            res.end(error.message);
+        }
+    };
+
+    getBookshelf();
 });
+
+/** Category server */
 
 /**
  * POST Request
