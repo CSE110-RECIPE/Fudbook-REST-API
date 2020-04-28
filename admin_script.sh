@@ -10,6 +10,6 @@ elif [ "$1" = "development" ]
 then
     echo "Development mode"
 
-    PORT1=3001 node ./services/recipe_services.js & \
+    PORT1=3001 node ./src/services/recipe_service.js & \
         PORT1=3001 PORT=3000 nodemon
 fi
