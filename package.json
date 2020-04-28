@@ -2,7 +2,8 @@
   "name": "fudbook-restapi",
   "version": "1.0.0",
   "description": "This service process inflow and divert it with multiple outflow",
-  "main": "index.js",
+  "main": "./src/index.js",
+  "type": "module",
   "scripts": {
     "start": "./admin_script.sh development",
     "serve": "./admin_script.sh production"
