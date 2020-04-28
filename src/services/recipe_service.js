@@ -3,8 +3,9 @@ import admin from 'firebase-admin';
 import fs from 'fs';
 
 /** Initialize firebase admin */
-const keyPath = './fudbook-b3184-firebase-adminsdk-oj6pw-e9861767b6.json';
-const serviceAccount = JSON.parse(fs.readFileSync(keyPath, 'utf8'));
+const securedPath = './fudbook-b3184-firebase-adminsdk-oj6pw-e9861767b6.json';
+const serviceAccount = JSON.parse(fs.readFileSync(securedPath, 'utf8'));
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://fudbook-b3184.firebaseio.com"
@@ -37,5 +38,5 @@ app.post('/', (req, res) => {
 }) 
 
 app.listen(process.env.PORT1, () => { 
-  console.log("Recipe microservice started.");
+  console.log(`Recipe microservice started on port: ${process.env.PORT1}`);
 });
