@@ -1,7 +1,7 @@
-import express from 'express';
-import admin from 'firebase-admin';
-import fetch from 'node-fetch';
-import fs from 'fs';
+const express = require('express');
+const admin = require('firebase-admin');
+const fetch = require('node-fetch');
+const fs = require('fs');
 
 /** Initialize firebase admin */
 const securedPath = "./fudbook-b3184-firebase-adminsdk-oj6pw-e9861767b6.json";
