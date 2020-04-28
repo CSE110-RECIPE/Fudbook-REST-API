@@ -77,8 +77,14 @@ app.get('/feed', (req, res) => {
  * Returns the explore recipes
  */
 app.get('/explore', (req, res) => {
-    //console.log(req.body.name);
-    //res.end('');
+    /**
+     * req.body
+     * {
+     *      exclude_filter: string[],
+     *      include_filter: string[],
+     *      custom_token: string // optional and low priority
+     * }
+     */
     const options = {
         method: 'POST',
         header: {},
@@ -111,11 +117,18 @@ app.get('/explore', (req, res) => {
  * Returns the recipes in the given book
  */
 app.get('/book', (req, res) => {
+    /**
+     * req.body
+     * {
+     *      bookId: string
+     * }
+     */
+
     const options = {
         method: 'POST',
         header: {},
         body: {
-            book_id: req.body.id
+            book_id: req.body.bookId
         }
     };
 
@@ -141,11 +154,18 @@ app.get('/book', (req, res) => {
  * Returns the books in bookshelf
  */
 app.get('/bookshelf', (req, res) => {
+    /**
+     * req.body
+     * {
+     *      bookshelfId: string
+     * }
+     */
+
     const options = {
         method: 'POST',
         header: {},
         body: {
-            bookshelf: req.body.name
+            bookshelf: req.body.bookshelfId
         }
     };
 
@@ -172,10 +192,55 @@ app.get('/bookshelf', (req, res) => {
  * POST Request
  * Creates a new recipe
  */
-app.post('/', (req, res) => {
-    console.log(req.body.name);
+app.post('/create', (req, res) => {
+    /**
+     * req.body
+     * {
+     *      "name": string,
+     *      "ingredients": string[],
+     *      "categories": string[],
+     *      "steps": string[],
+     *      "image": string,
+     *      "author": string
+     * }
+     */
+
     res.end(`Post request: ${req.body.name}`);
 })
+
+/**
+ * PUT Request
+ * Edit an existing recipe in recipe database
+ */
+app.put('/edit', (req, res) => {
+    /**
+     * req.body
+     * {
+     *      "recipeId": string
+     *      "name": string,
+     *      "ingredients": string[],
+     *      "categories": string[],
+     *      "steps": string[],
+     *      "image": string,
+     *      "editor": string
+     * }
+     */
+    res.end(`Recipe ${req.body.name} edited`);
+});
+
+/**
+ * DELETE Request
+ * Delete an existing recipe in recipe database
+ */
+app.delete('/delete', (req, res) => {
+    /**
+     * req.body
+     * {
+     *      "recipeId": string
+     * }
+     */
+    res.end(`Recipe ${req.body.name} deleted`);
+});
 
 /*******************************************************************************
  * Activates port
