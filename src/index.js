@@ -12,6 +12,8 @@ admin.initializeApp({
   databaseURL: "https://fudbook-b3184.firebaseio.com"
 });
 
+const dbRef = admin.database().ref();
+
 /**
  * Initialize express instance
  */
@@ -120,7 +122,7 @@ app.get('/book', (req, res) => {
     /**
      * req.body
      * {
-     *      bookId: string
+     *      book_id: string
      * }
      */
 
@@ -157,7 +159,7 @@ app.get('/bookshelf', (req, res) => {
     /**
      * req.body
      * {
-     *      bookshelfId: string
+     *      bookshelf_id: string
      * }
      */
 
@@ -201,9 +203,14 @@ app.post('/create', (req, res) => {
      *      "categories": string[],
      *      "steps": string[],
      *      "image": string,
-     *      "author": string
+     *      "author": string,
+     *      "editor": string
      * }
      */
+
+    const newRecipeKey = dbRef.child('recipe').push().key;
+
+    dbRef.child('recipe/' + newRecipeKey ).set(req.body);
 
     res.end(`Post request: ${req.body.name}`);
 })
@@ -216,7 +223,7 @@ app.put('/edit', (req, res) => {
     /**
      * req.body
      * {
-     *      "recipeId": string
+     *      "recipe_id": string
      *      "name": string,
      *      "ingredients": string[],
      *      "categories": string[],
@@ -225,7 +232,30 @@ app.put('/edit', (req, res) => {
      *      "editor": string
      * }
      */
-    res.end(`Recipe ${req.body.name} edited`);
+
+    var updates = {};
+
+    if (req.body.name !== '')
+        updates[req.body.recipe_id + '/name'] = req.body.name;
+
+    if (req.body.ingredients.length !== 0 )
+        updates[req.body.recipe_id + '/ingredients'] = req.body.ingredients;
+
+    if (req.body.categories.length !== 0 )
+        updates[req.body.recipe_id + '/categories'] = req.body.categories;
+    
+    if (req.body.steps.length !== 0 )
+        updates[req.body.recipe_id + '/steps'] = req.body.steps;
+
+    if (req.body.image !== '')
+        updates[req.body.recipe_id + '/image'] = req.body.image;
+
+    if (req.body.editor !== '')
+        updates[req.body.recipe_id + '/editor'] = req.body.editor;
+
+    dbRef.child('recipe').update(updates);
+
+    res.end(JSON.stringify(updates));
 });
 
 /**
@@ -236,10 +266,13 @@ app.delete('/delete', (req, res) => {
     /**
      * req.body
      * {
-     *      "recipeId": string
+     *      "recipe_id": string
      * }
      */
-    res.end(`Recipe ${req.body.name} deleted`);
+    
+    dbRef.child('recipe').child(req.body.recipe_id).remove();
+
+    res.end(`Recipe ${req.body.recipe_id} deleted`);
 });
 
 /*******************************************************************************
