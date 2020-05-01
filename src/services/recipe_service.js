@@ -18,24 +18,47 @@ const app = express();
 const dbRef = admin.database().ref();
 
 var recipeObj = undefined;
+var ingredientObj = undefined;
 
 /** Load recipe database */
 dbRef.child('recipe').once('value').then(snapshot => {
     recipeObj = snapshot.val();
 });
 
-/** Initialize data structure */
+dbRef.child('ingredient').once('value').then(snapshot => {
+    ingredientObj = snapshot.val();
+});
+
+
+
 
 /**
  * POST Request
  * Returns the feed recipes
  */
-app.post('/', (req, res) => {
+app.post('/filterRecipe', (req, res) => {
     // TODO: Implement data structure search
     // req.body.exclude_filter;
     // req.body.include_filter;
+
     res.end(JSON.stringify(recipeObj));
-}) 
+});
+
+/**
+ * POST Request
+ * Returns the feed recipes
+ */
+app.post('/getRecipes', (req, res) => {
+  // TODO: Implement data structure search
+  /**
+   * req.body
+   * {
+   *    recipes: recipe_id[]
+   * }
+   */
+
+  res.end(JSON.stringify(recipeObj));
+});
 
 app.listen(process.env.PORT1, () => { 
   console.log(`Recipe microservice started on port: ${process.env.PORT1}`);

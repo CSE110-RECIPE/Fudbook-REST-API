@@ -1,7 +1,7 @@
 const express = require('express');
 const admin = require('firebase-admin');
-const fetch = require('node-fetch');
 const fs = require('fs');
+const request = require('./js/request');
 
 /** Initialize firebase admin */
 const securedPath = "./fudbook-b3184-firebase-adminsdk-oj6pw-e9861767b6.json";
@@ -57,21 +57,7 @@ app.get('/feed', (req, res) => {
         }
     };
 
-    const getRecipe = async () => {
-        try {
-            const recipes = await fetch(`http://localhost:${process.env.PORT1}`,
-                                        options)
-                                    .then(fres => fres.json());
-
-            // TODO: format data returning 
-            
-            res.send(JSON.stringify(recipes));
-        } catch(error) {
-            res.end(error.message);
-        }
-    };
-
-    getRecipe();
+    request.service(options, process.env.PORT1, res, 'filterRecipe');
 });
 
 /**
@@ -97,21 +83,7 @@ app.get('/explore', (req, res) => {
         }
     };
 
-    const getRecipe = async () => {
-        try {
-            const recipes = await fetch(`http://localhost:${process.env.PORT1}`,
-                                        options)
-                                    .then(fres => fres.json());
-
-            // TODO: format data returning 
-            
-            res.send(JSON.stringify(recipes));
-        } catch(error) {
-            res.end(error.message);
-        }
-    };
-
-    getRecipe();
+    request.service(options, process.env.PORT1, res, 'filterRecipe');
 });
 
 /**
@@ -122,7 +94,7 @@ app.get('/book', (req, res) => {
     /**
      * req.body
      * {
-     *      book_id: string
+     *      recipes: recipe_id[]
      * }
      */
 
@@ -130,25 +102,11 @@ app.get('/book', (req, res) => {
         method: 'POST',
         header: {},
         body: {
-            book_id: req.body.bookId
+            recipes: req.body.recipes
         }
     };
 
-    const getBook = async () => {
-        try {
-            const books = await fetch(`http://localhost:${process.env.PORT2}`,
-                                        options)
-                                    .then(fres => fres.json());
-
-            // TODO: format data returning 
-            
-            res.send(JSON.stringify(books));
-        } catch(error) {
-            res.end(error.message);
-        }
-    };
-
-    getBook();
+    request.service(options, process.env.PORT1, res, 'getRecipes');
 });
 
 /**
@@ -159,7 +117,7 @@ app.get('/bookshelf', (req, res) => {
     /**
      * req.body
      * {
-     *      bookshelf_id: string
+     *      bookshelf: book_id[]
      * }
      */
 
@@ -167,25 +125,11 @@ app.get('/bookshelf', (req, res) => {
         method: 'POST',
         header: {},
         body: {
-            bookshelf: req.body.bookshelfId
+            bookshelf: req.body.bookshelf
         }
     };
 
-    const getBookshelf = async () => {
-        try {
-            const bookshelf = await fetch(`http://localhost:${process.env.PORT3}`,
-                                        options)
-                                    .then(fres => fres.json());
-
-            // TODO: format data returning 
-            
-            res.send(JSON.stringify(bookshelf));
-        } catch(error) {
-            res.end(error.message);
-        }
-    };
-
-    getBookshelf();
+    request.service(options, process.env.PORT2, res);
 });
 
 /** Category server */
@@ -194,10 +138,11 @@ app.get('/bookshelf', (req, res) => {
  * POST Request
  * Creates a new recipe
  */
-app.post('/create', (req, res) => {
+app.post('/createRecipe', (req, res) => {
     /**
      * req.body
      * {
+     *      "uid": string,
      *      "name": string,
      *      "ingredients": string[],
      *      "categories": string[],
@@ -208,11 +153,112 @@ app.post('/create', (req, res) => {
      * }
      */
 
-    const newRecipeKey = dbRef.child('recipe').push().key;
+    /**
+     * TODO:
+     * Add ingredient.json
+     * Add the recipe_id to each corresponding ingredients
+     */
 
-    dbRef.child('recipe/' + newRecipeKey ).set(req.body);
+    admin.auth().getUser(req.body.uid)
+        .then(userRecord => {
+            const newRecipeKey = dbRef.child('recipe').push().key;
 
-    res.end(`Post request: ${req.body.name}`);
+            dbRef.child('recipe/' + newRecipeKey ).set(req.body);
+
+            dbRef.child('book/' + userRecord.my_book + '/recipes').set({
+                newRecipeKey: newRecipeKey
+            });
+
+            res.end(`User created a recipe.`);
+        })
+        .catch(err => {
+            console.log(err.message);
+            res.end(`POST request create recipe: User authentication failed.`);
+        });
+});
+
+/**
+ * POST request
+ * Creates new book
+ */
+app.post('/createBook', (req, res) => {
+    /**
+     * req.body
+     * {
+     *      name: string,
+     *      recipes: string[],
+     *      uid: string,
+     *      default: boolean
+     * 
+     * }
+     */
+
+    admin.auth().getUser(req.body.uid)
+        .then( val => {
+
+            const newBookKey = dbRef.child('book').push().key;
+
+            dbRef.child('book/' + newBookKey).set({
+                name: req.body.name,
+                recipes: req.body.recipes,
+                author: req.body.uid,
+                default: false
+            });
+
+            res.end(`Book created.`);
+        })
+        .catch( err => {
+            res.end(`POST request create book: User authentication failed.`);
+        });    
+})
+
+/**
+ * POST request
+ * Setup favorite and personal book for new user
+ * PS: The frontend should check if the user is new
+ */
+app.post('/createUser', (req, res) => {
+    /**
+     * req.body 
+     * {
+     *      "uid": string
+     * }
+     */
+
+    admin.auth().getUser(req.body.uid)
+        .then(val => {
+            const newFavoriteKey = dbRef.child('book').push().key;
+            const newPersonalBookKey = dbRef.child('book').push().key;
+
+            dbRef.child('book/' + newFavoriteKey).set({
+                name: "Favorite",
+                recipes: [],
+                author: req.body.uid,
+                default: true
+            });
+
+            dbRef.child('book/' + newPersonalBookKey).set({
+                name: "My Book",
+                recipes: [],
+                author: req.body.uid,
+                default: true
+            });
+        
+            admin.auth().updateUser(req.body.uid, {
+                favorite_book: newFavoriteKey,
+                my_book: newPersonalBookKey
+            })
+                .catch(err => {
+                    console.log(err.message);
+                    res.end(`POST request create user: User update failed.`);
+                });
+        
+            res.end(`Your bookshelf has been setup.`);
+        })
+        .catch(err => {
+            console.log(err.message);
+            res.end(`POST request create user: User authentication failed.`);
+        });
 })
 
 /**
@@ -223,7 +269,8 @@ app.put('/edit', (req, res) => {
     /**
      * req.body
      * {
-     *      "recipe_id": string
+     *      "uid": string,
+     *      "recipe_id": string,
      *      "name": string,
      *      "ingredients": string[],
      *      "categories": string[],
@@ -233,29 +280,37 @@ app.put('/edit', (req, res) => {
      * }
      */
 
-    var updates = {};
+    admin.auth().getUser(req.body.uid)
+        .then(val => {
+            var updates = {};
 
-    if (req.body.name !== '')
-        updates[req.body.recipe_id + '/name'] = req.body.name;
+            if (req.body.name !== '')
+                updates[req.body.recipe_id + '/name'] = req.body.name;
 
-    if (req.body.ingredients.length !== 0 )
-        updates[req.body.recipe_id + '/ingredients'] = req.body.ingredients;
+            if (req.body.ingredients.length !== 0 )
+                updates[req.body.recipe_id + '/ingredients'] = req.body.ingredients;
 
-    if (req.body.categories.length !== 0 )
-        updates[req.body.recipe_id + '/categories'] = req.body.categories;
+            if (req.body.categories.length !== 0 )
+                updates[req.body.recipe_id + '/categories'] = req.body.categories;
+            
+            if (req.body.steps.length !== 0 )
+                updates[req.body.recipe_id + '/steps'] = req.body.steps;
+
+            if (req.body.image !== '')
+                updates[req.body.recipe_id + '/image'] = req.body.image;
+
+            if (req.body.editor !== '')
+                updates[req.body.recipe_id + '/editor'] = req.body.editor;
+
+            dbRef.child('recipe').update(updates);
+
+            res.end(JSON.stringify(updates));
+        })
+        .catch(err => {
+            console.log(err.message);
+            res.end(`PUT request edit: User authentication failed.`);
+        })
     
-    if (req.body.steps.length !== 0 )
-        updates[req.body.recipe_id + '/steps'] = req.body.steps;
-
-    if (req.body.image !== '')
-        updates[req.body.recipe_id + '/image'] = req.body.image;
-
-    if (req.body.editor !== '')
-        updates[req.body.recipe_id + '/editor'] = req.body.editor;
-
-    dbRef.child('recipe').update(updates);
-
-    res.end(JSON.stringify(updates));
 });
 
 /**
@@ -266,10 +321,28 @@ app.delete('/delete', (req, res) => {
     /**
      * req.body
      * {
+     *      "uid": string
      *      "recipe_id": string
      * }
      */
     
+    /**
+     * TODO:
+     * Priority high
+     * 
+     * Issue:
+     * If you delete a recipe then the recipe should be removed in 
+     * all books it was in.
+     * 
+     * Resolution:
+     * 1. Iterate through all books to remove recipe from each book
+     *    Catch: bad run time.
+     * 2. Add pointers in recipes, pointing back to book 
+     *    Catch: bad space complexity
+     * 
+     * Resolved:
+     * Lazy deletion
+     */
     dbRef.child('recipe').child(req.body.recipe_id).remove();
 
     res.end(`Recipe ${req.body.recipe_id} deleted`);

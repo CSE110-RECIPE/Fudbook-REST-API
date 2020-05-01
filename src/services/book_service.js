@@ -26,7 +26,10 @@ dbRef.child('book').once('value').then(snapshot => {
     bookObj = snapshot.val();
 });
 
-/** Initialize data structure */
+
+
+
+
 
 /**
  * POST Request
@@ -34,8 +37,12 @@ dbRef.child('book').once('value').then(snapshot => {
  */
 app.post('/', (req, res) => {
     // TODO: Implement data structure search
-    // req.body.exclude_filter;
-    // req.body.include_filter;
+    /**
+     * req.body
+     * {
+     *    bookshelf: book_id[]
+     * }
+     */
     res.end(JSON.stringify(bookObj));
 }) 
 

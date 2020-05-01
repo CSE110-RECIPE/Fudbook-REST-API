@@ -24,7 +24,11 @@ dbRef.child('category').once('value').then(snapshot => {
     catObj = snapshot.val();
 });
 
-/** Initialize data structure */
+
+
+
+
+
 
 /**
  * POST Request
@@ -32,8 +36,12 @@ dbRef.child('category').once('value').then(snapshot => {
  */
 app.post('/', (req, res) => {
     // TODO: Implement data structure search
-    // req.body.exclude_filter;
-    // req.body.include_filter;
+    /**
+     * req.body
+     * {
+     *    category: category_name
+     * }
+     */
     res.end(JSON.stringify(catObj));
 }) 
 
