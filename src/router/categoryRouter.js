@@ -6,6 +6,12 @@ const routes = () => {
 
     Router.route('/category')
         .get((req, res) => {
+            /**
+             * req.body
+             * {
+             *      category: category_name[]
+             * }
+             */
 
             const options = {
                 method: 'POST',

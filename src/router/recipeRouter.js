@@ -47,7 +47,29 @@ const routes = (admin, dbRef) => {
             };
 
             request.service(options, process.env.PORT1, res, 'getRecipes');
-        });
+        })
+        .delete((req, res) => {
+
+            /**
+             * req.body
+             * {
+             *      uid: string
+             *      book_id: string,
+             *      recipe_id: string
+             * }
+             */
+            
+            admin.auth().getUser(req.body.uid)
+                .then(userRecord => {
+
+                    const book_id = req.body.book_id;
+                    const recipe_id = req.body.recipe_id;
+
+                    dbRef.child(`book/${book_id}/${recipe_id}`).remove();
+
+                    res.end(`Recipe removed from book.`);
+                })
+        })
 
     Router.route('/recipe')
         .post((req, res) => {

@@ -2,6 +2,8 @@ const express = require('express');
 const admin = require('firebase-admin');
 const fs = require('fs');
 
+const recipeServiceRouter = require('./router/recipeRouter');
+
 /** Initialize firebase admin */
 const securedPath = './fudbook-b3184-firebase-adminsdk-oj6pw-e9861767b6.json';
 const serviceAccount = JSON.parse(fs.readFileSync(securedPath, 'utf8'));
@@ -29,36 +31,7 @@ dbRef.child('ingredient').once('value').then(snapshot => {
     ingredientObj = snapshot.val();
 });
 
-
-
-
-/**
- * POST Request
- * Returns the feed recipes
- */
-app.post('/filterRecipe', (req, res) => {
-    // TODO: Implement data structure search
-    // req.body.exclude_filter;
-    // req.body.include_filter;
-
-    res.end(JSON.stringify(recipeObj));
-});
-
-/**
- * POST Request
- * Returns the feed recipes
- */
-app.post('/getRecipes', (req, res) => {
-  // TODO: Implement data structure search
-  /**
-   * req.body
-   * {
-   *    recipes: recipe_id[]
-   * }
-   */
-
-  res.end(JSON.stringify(recipeObj));
-});
+app.use('/', recipeServiceRouter(recipeObj, ingredientObj));
 
 app.listen(process.env.PORT1, () => { 
   console.log(`Recipe microservice started on port: ${process.env.PORT1}`);

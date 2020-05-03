@@ -1,9 +1,8 @@
-/**
- * Access bookshelf and returns list of books
- */
 const express = require('express');
 const admin = require('firebase-admin');
 const fs = require('fs');
+
+const bookServiceRouter = require('./router/bookRouter');
 
 /** Initialize firebase admin */
 const securedPath = './fudbook-b3184-firebase-adminsdk-oj6pw-e9861767b6.json';
@@ -26,25 +25,7 @@ dbRef.child('book').once('value').then(snapshot => {
     bookObj = snapshot.val();
 });
 
-
-
-
-
-
-/**
- * POST Request
- * Returns the feed recipes
- */
-app.post('/', (req, res) => {
-    // TODO: Implement data structure search
-    /**
-     * req.body
-     * {
-     *    bookshelf: book_id[]
-     * }
-     */
-    res.end(JSON.stringify(bookObj));
-}) 
+app.use('/', bookServiceRouter(bookObj));
 
 app.listen(process.env.PORT2, () => { 
   console.log(`Book microservice started on port: ${process.env.PORT2}`);
