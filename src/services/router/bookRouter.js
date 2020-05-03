@@ -4,7 +4,7 @@ const routes = (book) => {
     const Router = express.Router();
 
     Router.route('/')
-        .post('/', (req, res) => {
+        .post((req, res) => {
             /**
              * req.body
              * {

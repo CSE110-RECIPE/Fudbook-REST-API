@@ -26,7 +26,7 @@ dbRef.child('category').once('value').then(snapshot => {
     catObj = snapshot.val();
 });
 
-app.use('/', categoryRouter(catOjb));
+app.use('/', categoryRouter(catObj));
 
 app.listen(process.env.PORT3, () => { 
   console.log(`Category microservice started on port: ${process.env.PORT3}`);
