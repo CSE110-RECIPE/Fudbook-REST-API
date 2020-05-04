@@ -4,11 +4,11 @@
 
 1. Recipe Request
     * Route `/recipe` 
-        * [POST](###POST-`/recipe`)
-        * PUT 
-        * DELETE
+        * [POST](###post-recipe)
+        * [PUT](###put-recipe) 
+        * [DELETE](###delete-recipe)
     * Route `/recipe/filter` 
-        * GET
+        * [GET](###get-recipe-filter)
     * Route `/recipe/book` 
         * GET 
         * DELETE
