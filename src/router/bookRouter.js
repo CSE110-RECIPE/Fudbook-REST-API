@@ -15,10 +15,10 @@ const routes = (admin, dbRef) => {
 
             const options = {
                 method: 'POST',
-                header: {},
-                body: {
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
                     bookshelf: req.body.bookshelf
-                }
+                })
             };
 
             request.service(options, process.env.PORT2, res);
@@ -38,7 +38,7 @@ const routes = (admin, dbRef) => {
              */
 
             admin.auth().getUser(req.body.uid)
-                .then( val => {
+                .then( userRecord => {
 
                     const newBookKey = dbRef.child('book').push().key;
 

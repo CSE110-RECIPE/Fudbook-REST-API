@@ -18,11 +18,11 @@ const routes = (admin, dbRef) => {
 
             const options = {
                 method: 'POST',
-                header: {},
-                body: {
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
                     exclude_filter: req.body.exclude_filter,
                     include_filter: req.body.include_filter,
-                }
+                })
             };
 
             request.service(options, process.env.PORT1, res, 'filterRecipe');
@@ -40,10 +40,10 @@ const routes = (admin, dbRef) => {
 
             const options = {
                 method: 'POST',
-                header: {},
-                body: {
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
                     recipes: req.body.recipes
-                }
+                })
             };
 
             request.service(options, process.env.PORT1, res, 'getRecipe');

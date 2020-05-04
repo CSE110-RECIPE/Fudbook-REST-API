@@ -15,10 +15,10 @@ const routes = () => {
 
             const options = {
                 method: 'POST',
-                header: {},
-                body: {
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
                     category: req.body.category
-                }
+                })
             };
 
             request.service(options, process.env.PORT3, res);
