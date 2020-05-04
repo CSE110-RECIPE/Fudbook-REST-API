@@ -25,7 +25,6 @@ local machine for development and testing purposes.
 3. Expressjs
 
 # Documentation
----
 
 ## Routes Overview
 
@@ -44,8 +43,9 @@ local machine for development and testing purposes.
 Content type: JSON
 All request bodies are in JSON. Also remember to stringify your JSON before sending any request.
 
-## 1. Recipe Request
 ---
+
+## 1. Recipe Request
 
 ### POST `/recipe`
 
@@ -66,6 +66,8 @@ Request body:
 }
 ```
 
+---
+
 ### PUT `/recipe`
 
 Edit a recipe 
@@ -85,6 +87,8 @@ Request body:
 }
 ```
 
+---
+
 ### DELETE `/recipe`
 
 Delete a recipe
@@ -96,6 +100,8 @@ Request body:
     "recipe_id": string
 }
 ```
+
+---
 
 ### GET `/recipe/filter`
 
@@ -109,6 +115,8 @@ Request body:
 }
 ```
 
+---
+
 ### GET `/recipe/book`
 
 GET request
@@ -121,6 +129,8 @@ Request body:
     recipes: recipe_id[]
 }
 ```
+
+---
 
 ### DELETE `/recipe/book`
 
