@@ -15,17 +15,19 @@ admin.initializeApp({
 /** Initialize app */
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded());
+
 /** Initialize database */
 const dbRef = admin.database().ref();
 
 /** Load recipe database */
-var bookObj = undefined;
-
 dbRef.child('book').once('value').then(snapshot => {
-    bookObj = snapshot.val();
-});
+    const book = snapshot.val();
 
-app.use('/', bookServiceRouter(bookObj));
+    /** Load Router */
+    app.use('/', bookServiceRouter(book));
+});
 
 app.listen(process.env.PORT2, () => { 
   console.log(`Book microservice started on port: ${process.env.PORT2}`);

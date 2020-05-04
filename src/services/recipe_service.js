@@ -16,22 +16,23 @@ admin.initializeApp({
 /** Initialize app */
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded());
+
 /** Initialize database */
 const dbRef = admin.database().ref();
 
-var recipeObj = undefined;
-var ingredientObj = undefined;
+dbRef.child('recipe').once('value')
+  .then(snapshot => {
+    const recipe = snapshot.val();
 
-/** Load recipe database */
-dbRef.child('recipe').once('value').then(snapshot => {
-    recipeObj = snapshot.val();
+    dbRef.child('ingredient').once('value')
+      .then(snapshot => {
+        const ingredient = snapshot.val();
+
+        app.use('/', recipeServiceRouter(recipe, ingredient));
+    });
 });
-
-dbRef.child('ingredient').once('value').then(snapshot => {
-    ingredientObj = snapshot.val();
-});
-
-app.use('/', recipeServiceRouter(recipeObj, ingredientObj));
 
 app.listen(process.env.PORT1, () => { 
   console.log(`Recipe microservice started on port: ${process.env.PORT1}`);

@@ -13,6 +13,8 @@ const routes = (recipe, ingredient) => {
              * }
              */
 
+            var newRecipe = {};
+
              res.end(JSON.stringify(recipe));
         });
 
@@ -24,6 +26,12 @@ const routes = (recipe, ingredient) => {
              *    recipes: recipe_id[]
              * }
              */
+
+            var newRecipe = {};
+
+            req.body.recipes.forEach(id => {
+                newRecipe[`${id}`] = recipe[`${id}`]
+            });
 
             res.end(JSON.stringify(recipe));
         });

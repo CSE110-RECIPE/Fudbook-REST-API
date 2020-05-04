@@ -16,17 +16,19 @@ admin.initializeApp({
 /** Initialize app */
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded());
+
 /** Initialize database */
 const dbRef = admin.database().ref();
 
-var catObj = undefined;
-
 /** Load recipe database */
 dbRef.child('category').once('value').then(snapshot => {
-    catObj = snapshot.val();
-});
+    const category = snapshot.val();
 
-app.use('/', categoryRouter(catObj));
+    /** Load Router */
+    app.use('/', categoryRouter(category));
+});
 
 app.listen(process.env.PORT3, () => { 
   console.log(`Category microservice started on port: ${process.env.PORT3}`);
