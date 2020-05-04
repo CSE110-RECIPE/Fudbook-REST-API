@@ -1,17 +1,14 @@
 # Fudbook REST API
-======
 
 One Paragraph of project description goes here
 
 ## Prerequisites
-=================
 
 Software Requirements
 1. Nodejs
 2. Node Package Mananger (npm)
 
 ## Getting Started
-==================
 
 These instructions will get you a copy of the project up and running on your 
 local machine for development and testing purposes. 
@@ -22,36 +19,34 @@ local machine for development and testing purposes.
 4. Run npm start (The server should start without warnings and errors)
 
 ## Built With
-=============
 
 1. Firebase
 2. Nodejs
 3. Expressjs
 
 ## Documentation
-================
 
 ### Default Headers
-===================
 
 Content type: JSON
 
 All request bodies are in JSON. Also remember to stringify your JSON before sending any request.
 
 ### Routes Overview
-===================
 
 1. Recipe Request
-    * Route `/recipe` POST PUT DELETE
+    * Route `/recipe` 
+        * [POST](__POST__-`/recipe`)
+        * PUT 
+        * DELETE
     * Route `/recipe/filter` GET
     * Route `/recipe/book` GET DELETE
 
 ## 1. Recipe Request
-====================
 
 ### Route /recipe
 
-POST request
+__POST__ `/recipe`
 
 Create a new recipe 
 
