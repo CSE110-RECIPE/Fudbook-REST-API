@@ -46,7 +46,7 @@ const routes = (admin, dbRef) => {
                 }
             };
 
-            request.service(options, process.env.PORT1, res, 'getRecipes');
+            request.service(options, process.env.PORT1, res, 'getRecipe');
         })
         .delete((req, res) => {
 
