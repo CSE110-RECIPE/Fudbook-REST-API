@@ -24,29 +24,30 @@ local machine for development and testing purposes.
 2. Nodejs
 3. Expressjs
 
-## Documentation
+# Documentation
+---
 
-### Default Headers
-
-Content type: JSON
-
-All request bodies are in JSON. Also remember to stringify your JSON before sending any request.
-
-### Routes Overview
+## Routes Overview
 
 1. Recipe Request
     * Route `/recipe` 
-        * [POST](__POST__-`/recipe`)
+        * [POST](###POST-`/recipe`)
         * PUT 
         * DELETE
-    * Route `/recipe/filter` GET
-    * Route `/recipe/book` GET DELETE
+    * Route `/recipe/filter` 
+        * GET
+    * Route `/recipe/book` 
+        * GET 
+        * DELETE
+        
+### Default Headers
+Content type: JSON
+All request bodies are in JSON. Also remember to stringify your JSON before sending any request.
 
 ## 1. Recipe Request
+---
 
-### Route /recipe
-
-__POST__ `/recipe`
+### POST `/recipe`
 
 Create a new recipe 
 
@@ -65,7 +66,7 @@ Request body:
 }
 ```
 
-PUT request
+### PUT `/recipe`
 
 Edit a recipe 
 
@@ -84,7 +85,7 @@ Request body:
 }
 ```
 
-DELETE request
+### DELETE `/recipe`
 
 Delete a recipe
 
@@ -96,9 +97,7 @@ Request body:
 }
 ```
 
-### Route /recipe/filter
-
-GET request
+### GET `/recipe/filter`
 
 Retrieve recipes matching the filter
 
@@ -110,7 +109,7 @@ Request body:
 }
 ```
 
-### Route /recipe/book
+### GET `/recipe/book`
 
 GET request
 
@@ -123,7 +122,7 @@ Request body:
 }
 ```
 
-DELETE request
+### DELETE `/recipe/book`
 
 Remove a recipe from a book
 
