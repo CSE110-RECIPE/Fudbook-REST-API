@@ -1,5 +1,5 @@
 # Fudbook REST API
-==================
+======
 
 One Paragraph of project description goes here
 
