@@ -2,6 +2,7 @@ const express = require('express');
 const request = require('../js/request');
 
 const routes = (admin, dbRef) => {
+    console.log("in recipe router")
     const Router = express.Router();
 
     Router.route('/recipe/filter')
@@ -30,6 +31,7 @@ const routes = (admin, dbRef) => {
     
     Router.route('/recipe/book')
         .get((req, res) => {
+            console.log("in recipe book");
 
             /**
              * req.body
