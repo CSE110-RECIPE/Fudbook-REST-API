@@ -1,0 +1,441 @@
+{
+    "acai": [
+        "acai"
+    ],
+    "agave": [
+        "agave"
+    ],
+    "anchovy": [
+        "anchovy"
+    ],
+    "apple": [
+        "apple"
+    ],
+    "apricot": [
+        "apricot"
+    ],
+    "artichoke": [
+        "artichoke"
+    ],
+    "arugula": [
+        "arugula"
+    ],
+    "asparagus": [
+        "asparagus"
+    ],
+    "avocado": [
+        "avocado",
+        "guacamole"
+    ],
+    "bacon": [
+        "bacon"
+    ],
+    "banana": [
+        "banana"
+    ],
+    "basil": [
+        "basil"
+    ],
+    "beans": [
+        "beans",
+        "bean"
+    ],
+    "beef": [
+        "beef",
+        "chuck",
+        "sirloin",
+        "brisket"
+    ],
+    "beet": [
+        "beet"
+    ],
+    "blackberry": [
+        "blackberry"
+    ],
+    "blueberry": [
+        "blueberry"
+    ],
+    "bok choy": [
+        "bok choy"
+    ],
+    "bread": [
+        "bread",
+        "brioche",
+        "sourdough"
+    ],
+    "broccoli": [
+        "broccoli"
+    ],
+    "brussels sprouts": [
+        "brussels sprouts"
+    ],
+    "butter": [
+        "butter"
+    ],
+    "cabbage": [
+        "cabbage"
+    ],
+    "capers": [
+        "capers"
+    ],
+    "caramel": [
+        "caramel"
+    ],
+    "carrot": [
+        "carrot"
+    ],
+    "cauliflower": [
+        "cauliflower"
+    ],
+    "celery": [
+        "celery"
+    ],
+    "cereal": [
+        "cereal"
+    ],
+    "cheese": [
+        "cheese",
+        "cheddar",
+        "feta",
+        "gouda",
+        "gruy\u00e8re",
+        "gruyere",
+        "parmesan",
+        "ricotta"
+    ],
+    "cherry": [
+        "cherry",
+        "cherries"
+    ],
+    "chia": [
+        "chia"
+    ],
+    "chicken": [
+        "chicken"
+    ],
+    "chickpea": [
+        "chickpea"
+    ],
+    "chocolate": [
+        "chocolate",
+        "cocoa"
+    ],
+    "chorizo": [
+        "chorizo"
+    ],
+    "cinnamon": [
+        "cinnamon"
+    ],
+    "clam": [
+        "clam"
+    ],
+    "coconut": [
+        "coconut"
+    ],
+    "coffee": [
+        "coffee"
+    ],
+    "corn": [
+        "corn"
+    ],
+    "crab": [
+        "crab"
+    ],
+    "cranberry": [
+        "cranberry"
+    ],
+    "cucumber": [
+        "cucumber"
+    ],
+    "curry": [
+        "curry"
+    ],
+    "date": [
+        "date"
+    ],
+    "dragonfruit": [
+        "dragonfruit"
+    ],
+    "duck": [
+        "duck"
+    ],
+    "dulse": [
+        "dulse"
+    ],
+    "egg": [
+        "egg"
+    ],
+    "eggplant": [
+        "eggplant"
+    ],
+    "fish": [
+        "fish",
+        " cod ",
+        "herring",
+        "mackarel",
+        "salmon",
+        "albacore",
+        "tuna",
+        "trout"
+    ],
+    "flax": [
+        "flax"
+    ],
+    "flour": [
+        "flour"
+    ],
+    "garlic": [
+        "garlic"
+    ],
+    "ginger": [
+        "ginger"
+    ],
+    "granola": [
+        "granola"
+    ],
+    "grape": [
+        "grape"
+    ],
+    "guava": [
+        "guava"
+    ],
+    "ham": [
+        "ham"
+    ],
+    "honey": [
+        "honey"
+    ],
+    "horseradish": [
+        "horseradish"
+    ],
+    "kale": [
+        "kale"
+    ],
+    "kefir": [
+        "kefir"
+    ],
+    "ketchup": [
+        "ketchup"
+    ],
+    "kimchi": [
+        "kimchi"
+    ],
+    "kiwi": [
+        "kiwi"
+    ],
+    "lamb": [
+        "lamb"
+    ],
+    "leek": [
+        "leek"
+    ],
+    "lemon": [
+        "lemon"
+    ],
+    "lentil": [
+        "lentil"
+    ],
+    "lettuce": [
+        "lettuce"
+    ],
+    "lime": [
+        "lime"
+    ],
+    "lobster": [
+        "lobster"
+    ],
+    "malt": [
+        "malt"
+    ],
+    "mango": [
+        "mango"
+    ],
+    "mayonnaise": [
+        "mayonnaise"
+    ],
+    "melon": [
+        "melon",
+        "watermelon",
+        "cantaloupe",
+        "honeydew"
+    ],
+    "milk": [
+        "milk"
+    ],
+    "mint": [
+        "mint"
+    ],
+    "molasses": [
+        "molasses"
+    ],
+    "mushroom": [
+        "mushroom"
+    ],
+    "mussel": [
+        "mussel"
+    ],
+    "mustard": [
+        "mustard"
+    ],
+    "chestnut": [
+        "chestnut",
+        "hazelnut",
+        "peanut",
+        "walnut",
+        "pecan",
+        "cashew",
+        "pistachio",
+        "pine nut",
+        " nut ",
+        " nuts "
+    ],
+    "oats": [
+        "oats"
+    ],
+    "octopus": [
+        "octopus"
+    ],
+    "olives": [
+        "olives"
+    ],
+    "onion": [
+        "onion"
+    ],
+    "orange": [
+        "orange"
+    ],
+    "oyster": [
+        "oyster"
+    ],
+    "papaya": [
+        "papaya"
+    ],
+    "pasta": [
+        "pasta",
+        "spaghetti",
+        "noodle",
+        "lasagne"
+    ],
+    "pea": [
+        " pea "
+    ],
+    "peach": [
+        "peach"
+    ],
+    "pear": [
+        "pear"
+    ],
+    "peppers": [
+        "peppers",
+        "chilli pepper",
+        "jalapeno",
+        "chili pepper",
+        "bell pepper"
+    ],
+    "pickle": [
+        "pickle"
+    ],
+    "pineapple": [
+        "pineapple"
+    ],
+    "plum": [
+        "plum"
+    ],
+    "pomegranate": [
+        "pomegranate"
+    ],
+    "pork": [
+        "pork"
+    ],
+    "potato": [
+        "potato"
+    ],
+    "pulp": [
+        "pulp"
+    ],
+    "pumpkin": [
+        "pumpkin"
+    ],
+    "quinoa": [
+        "quinoa"
+    ],
+    "raisin": [
+        "raisin"
+    ],
+    "raspberry": [
+        "raspberry"
+    ],
+    "ravioli": [
+        "ravioli"
+    ],
+    "rhubarb": [
+        "rhubarb"
+    ],
+    "rice": [
+        "rice"
+    ],
+    "scallop": [
+        "scallop"
+    ],
+    "seaweed": [
+        "seaweed"
+    ],
+    "shellfish": [
+        "shellfish",
+        "shrimp",
+        "crayfish",
+        "lobster",
+        "clam",
+        "scallop",
+        "oyster",
+        "mussel"
+    ],
+    "shrimp": [
+        "shrimp"
+    ],
+    "soy": [
+        "soy"
+    ],
+    "spinach": [
+        "spinach"
+    ],
+    "squash": [
+        "squash"
+    ],
+    "squid": [
+        "squid"
+    ],
+    "strawberry": [
+        "strawberry"
+    ],
+    "sugar": [
+        "sugar"
+    ],
+    "tofu": [
+        "tofu"
+    ],
+    "tomato": [
+        "tomato"
+    ],
+    "turnip": [
+        "turnip"
+    ],
+    "vanillas": [
+        "vanillas"
+    ],
+    "wheat": [
+        "wheat"
+    ],
+    "whey": [
+        "whey"
+    ],
+    "yam": [
+        "yam"
+    ],
+    "yogurt": [
+        "yogurt"
+    ],
+    "zucchini": [
+        "zucchini"
+    ]
+}

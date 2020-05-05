@@ -24,7 +24,9 @@ const app = express();
 
 /* Middleware setup */
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({
+  extended: true
+}));
 app.use('/', recipeRouter(admin, dbRef));
 app.use('/', bookRouter(admin, dbRef));
 app.use('/', categoryRouter());

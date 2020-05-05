@@ -33,7 +33,7 @@ const routes = (recipe, ingredient) => {
                 newRecipe[`${id}`] = recipe[`${id}`]
             });
 
-            res.end(JSON.stringify(recipe));
+            res.end(JSON.stringify(newRecipe));
         });
 
     return Router;
