@@ -1,8 +1,12 @@
 const express = require('express');
 const request = require('../js/request');
+const fs = require('fs');
 
 const routes = (admin, dbRef) => {
     const Router = express.Router();
+
+    const in_RAW = fs.readFileSync('./src/file/ingredients.json', 'utf8');
+    const ingredient_list = JSON.parse(in_RAW);
 
     Router.route('/recipe/filter')
         .get((req, res) => {
@@ -16,6 +20,10 @@ const routes = (admin, dbRef) => {
              * }
              */
 
+            if (!req.body.exclude_filter || !req.body.include_filter) {
+                res.end(`Request body format incorrect: filter cannot be `
+                    + `undefined.`);
+            }
             const options = {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -38,15 +46,19 @@ const routes = (admin, dbRef) => {
              * }
              */
 
-            const options = {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    recipes: req.body.recipes
-                })
-            };
+            if (!req.body.recipes)
+                res.end(`Request body format incorrect: recipes not found`);
+            else {
+                const options = {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        recipes: req.body.recipes
+                    })
+                };
 
-            request.service(options, process.env.PORT1, res, 'getRecipe');
+                request.service(options, process.env.PORT1, res, 'getRecipe');
+            }
         })
         .delete((req, res) => {
 
@@ -59,16 +71,31 @@ const routes = (admin, dbRef) => {
              * }
              */
             
-            admin.auth().getUser(req.body.uid)
-                .then(userRecord => {
+            if (!req.body.uid) {
 
-                    const book_id = req.body.book_id;
-                    const recipe_id = req.body.recipe_id;
+                res.end(`Request body format incorrect: uid not found.`);
 
-                    dbRef.child(`book/${book_id}/${recipe_id}`).remove();
+            } else if (!req.body.book_id) {
 
-                    res.end(`Recipe removed from book.`);
-                })
+                res.end(`Request body format incorrect: book_id not found.`);
+
+            } else if (!req.recipe_id) {
+                
+                res.end(`Request body format incorrect: recipe_id not found.`);
+
+            } else {
+
+                admin.auth().getUser(req.body.uid)
+                    .then(userRecord => {
+
+                        const book_id = req.body.book_id;
+                        const recipe_id = req.body.recipe_id;
+
+                        dbRef.child(`book/${book_id}/${recipe_id}`).remove();
+
+                        res.end(`Recipe removed from book.`);
+                    })
+            }
         })
 
     Router.route('/recipe')
@@ -76,7 +103,7 @@ const routes = (admin, dbRef) => {
             /**
              * req.body
              * {
-             *      "uid": string,
+             *      "uid": string
              *      "name": string,
              *      "ingredients": string[],
              *      "categories": string[],
@@ -93,22 +120,81 @@ const routes = (admin, dbRef) => {
              * Add the recipe_id to each corresponding ingredients
              */
 
-            admin.auth().getUser(req.body.uid)
-            .then(userRecord => {
-                const newRecipeKey = dbRef.child('recipe').push().key;
+            if (!req.body.uid) {
 
-                dbRef.child('recipe/' + newRecipeKey ).set(req.body);
+                res.end(`Request body format incorrect: uid not found.`);
 
-                dbRef.child('book/' + userRecord.my_book + '/recipes').set({
-                    newRecipeKey: newRecipeKey
+            } else if (!req.body.name) {
+
+                res.end(`Request body format incorrect: name not found.`);
+
+            } else if (!req.body.ingredients) {
+
+                res.end(`Request body format incorrect: ingredients not found.`);
+
+            } else if (!req.body.categories) {
+
+                res.end(`Request body format incorrect: categories not found.`);
+
+            } else if (!req.body.steps) {
+
+                res.end(`Request body format incorrect: steps not found.`);
+
+            } else if (!req.body.image) {
+
+                res.end(`Request body format incorrect: image not found.`);
+
+            } else if (!req.body.author) {
+
+                res.end(`Request body format incorrect: author not found.`);
+
+            } else if (!req.body.editor && req.body.editor !== '') {
+
+                res.end(`Request body format incorrect: editor not found.`);
+
+            } else {
+
+                admin.auth().getUser(req.body.uid)
+                .then(userRecord => {
+                    const newRecipeKey = dbRef.child('recipe').push().key;
+
+                    dbRef.child('book/' + userRecord.my_book + '/recipes').set({
+                        newRecipeKey: newRecipeKey
+                    });
+
+                    var newRecipe = req.body;
+                    var tags = [];
+                    var tagsUpdate = {};
+
+                    Object.keys(ingredient_list).forEach(key => {
+                        ingredient_list[key].forEach(item => {
+                            req.body.ingredients.forEach(in_item => {
+                                if (in_item === item) {
+                                    tags.push(key);
+                                    tagsUpdate[key + '/' + newRecipeKey] = 
+                                        newRecipeKey;
+                                }
+                            });
+                        });
+                    });
+
+                    /** Update ingredient data structure */
+                    dbRef.child('ingredient').update(tagsUpdate);
+
+                    /** Add tags to the newRecipe */
+                    newRecipe['tags'] = tags;
+
+                    /** Upload the new recipe */
+                    dbRef.child('recipe/' + newRecipeKey ).set(newRecipe);
+
+                    res.end(`User created a recipe.`);
+                })
+                .catch(err => {
+                    console.log(err.message);
+                    res.end(`POST request create recipe: User authentication `
+                        + `failed.`);
                 });
-
-                res.end(`User created a recipe.`);
-            })
-            .catch(err => {
-                console.log(err.message);
-                res.end(`POST request create recipe: User authentication failed.`);
-            });
+            }
         })
         .put((req, res) => {
             /**
@@ -121,43 +207,48 @@ const routes = (admin, dbRef) => {
              *      "categories": string[],
              *      "steps": string[],
              *      "image": string,
-             *      "editor": string
              * }
              */
 
-            admin.auth().getUser(req.body.uid)
-                .then(val => {
-                    var updates = {};
+             if (!req.body.uid) {
+                 res.end(`Request body format incorrect: uid not found.`);
+             } else {
 
-                    if (req.body.name !== '')
-                        updates[req.body.recipe_id + '/name'] = req.body.name;
+                admin.auth().getUser(req.body.uid)
+                    .then(val => {
+                        var updates = {};
 
-                    if (req.body.ingredients.length !== 0 )
-                        updates[req.body.recipe_id + '/ingredients'] 
-                            = req.body.ingredients;
+                        if (req.body.name && req.body.name !== '')
+                            updates[req.body.recipe_id + '/name'] 
+                                = req.body.name;
 
-                    if (req.body.categories.length !== 0 )
-                        updates[req.body.recipe_id + '/categories'] 
-                            = req.body.categories;
-                    
-                    if (req.body.steps.length !== 0 )
-                        updates[req.body.recipe_id + '/steps'] = req.body.steps;
+                        if (req.body.ingredients 
+                                && req.body.ingredients.length !== 0 )
+                            updates[req.body.recipe_id + '/ingredients'] 
+                                = req.body.ingredients;
 
-                    if (req.body.image !== '')
-                        updates[req.body.recipe_id + '/image'] = req.body.image;
+                        if (req.body.categories 
+                                && req.body.categories.length !== 0 )
+                            updates[req.body.recipe_id + '/categories'] 
+                                = req.body.categories;
+                        
+                        if (req.body.steps && req.body.steps.length !== 0 )
+                            updates[req.body.recipe_id + '/steps'] 
+                                = req.body.steps;
 
-                    if (req.body.editor !== '')
-                        updates[req.body.recipe_id + '/editor']
-                            = req.body.editor;
+                        if (req.body.image && req.body.image !== '')
+                            updates[req.body.recipe_id + '/image'] 
+                                = req.body.image;
 
-                    dbRef.child('recipe').update(updates);
+                        dbRef.child('recipe').update(updates);
 
-                    res.end(JSON.stringify(updates));
-                })
-                .catch(err => {
-                    console.log(err.message);
-                    res.end(`PUT request edit: User authentication failed.`);
-            });    
+                        res.end(JSON.stringify(updates));
+                    })
+                    .catch(err => {
+                        console.log(err.message);
+                        res.end(`PUT request edit: User authentication failed.`);
+                });    
+            }
         })
         .delete((req, res) => {
             /**
@@ -171,11 +262,15 @@ const routes = (admin, dbRef) => {
             /**
              * Lazy deletion
              */
-            dbRef.child('recipe').child(req.body.recipe_id).set({
-                removed: true
-            });
+            if (!req.body.uid)
+                res.end(`Request body format incorrect: uid not found.`);
+            else {
+                dbRef.child('recipe').child(req.body.recipe_id).set({
+                    removed: true
+                });
 
-            res.end(`Recipe ${req.body.recipe_id} deleted`);
+                res.end(`Recipe ${req.body.recipe_id} deleted`);
+            }
         });
 
     return Router;
