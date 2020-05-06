@@ -12,19 +12,24 @@
     * Route `/recipe/book` 
         * [GET](#get-recipebook) 
         * [DELETE](#delete-recipebook)
-        
-### Default Headers
-Content type: JSON
-All request bodies are in JSON. Also remember to stringify your JSON before sending any request.
+2. Book Request
+    * Route `/book`
+        * [POST](#post-book)
+        * [DELETE](#delete-book)
+    * Route `/book/bookshelf`
+        * [GET](#get-bookbookshelf)
+    * Route `/book/newUser`
+        * [POST](#post-booknewUser)
 
-
-## 1. Recipe Request
+# Recipe Request
 
 ### POST `/recipe`
 
-Create a new recipe 
+Add a new recipe to the database
 
-Request body:
+__Content Type__: application/json
+
+__Request body__:
 
 ```
 {
@@ -39,13 +44,29 @@ Request body:
 }
 ```
 
+__Response Type__: string
+
+__Response Body__:
+
+Success
+```
+"User created a recipe"
+```
+
+Fail
+```
+"error message"
+```
+
 ---
 
 ### PUT `/recipe`
 
-Edit a recipe 
+Edit an existing recipe in the database 
 
-Request body:
+__Content Type__: application/json
+
+__Request body__:
 
 ```
 {
@@ -60,13 +81,29 @@ Request body:
 }
 ```
 
+__Response Type__: string
+
+__Response Body__:
+
+Success
+```
+"User edited a recipe."
+```
+
+Fail
+```
+"error message"
+```
+
 ---
 
 ### DELETE `/recipe`
 
-Delete a recipe
+Removes an existing recipe from the database
 
-Request body:
+__Content Type__: application/json
+
+__Request body__:
 ```
 {
     "uid": string
@@ -74,18 +111,63 @@ Request body:
 }
 ```
 
+__Response Type__: string
+
+__Response Body__:
+
+Success
+```
+"User deleted a recipe."
+```
+
+Fail
+```
+"error message"
+```
+
 ---
 
 ### GET `/recipe/filter`
 
-Retrieve recipes matching the filter
+Retrieve recipes in the database that matches the ingredient preferences
 
-Request body:
+__Content Type__: application/json
+
+__Request body__:
 ```
 {
     "exclude_filter": string[],
     "include_filter": string[],
 }
+```
+
+__Response Type__: json
+
+__Response Body__:
+
+Success
+```
+{
+    "recipe_id": {
+        "uid": string,
+        "name": string,
+        "ingredients": string[],
+        "categories": string[],
+        "steps": string[],
+        "tags": string[],
+        "image": string,
+        "author": string,
+        "editor": string
+    }
+    .
+    .
+    .
+}
+```
+
+Fail
+```
+"error message"
 ```
 
 ---
@@ -96,11 +178,42 @@ GET request
 
 Retrieve a list of recipes
 
-Request body:
+__Content Type__: application/json
+
+__Request body__:
 ```
 {
     recipes: recipe_id[]
 }
+```
+
+__Response Type__: json
+
+__Response Body__:
+
+Success
+```
+{
+    "recipe_id": {
+        "uid": string,
+        "name": string,
+        "ingredients": string[],
+        "categories": string[],
+        "steps": string[],
+        "tags": string[],
+        "image": string,
+        "author": string,
+        "editor": string
+    }
+    .
+    .
+    .
+}
+```
+
+Fail
+```
+"error message"
 ```
 
 ---
@@ -109,11 +222,134 @@ Request body:
 
 Remove a recipe from a book
 
-Request body:
+__Content Type__: application/json
+
+__Request body__:
 ```
 {
     "uid": string,
     "book_id": string,
     "recipe_id": string
 }
+```
+
+__Response Type__: string
+
+__Response Body__:
+
+Success
+```
+"User removed recipe from book"
+```
+
+Fail
+```
+"error message"
+```
+
+# Book Request
+
+### POST `/book`
+
+Create a new book
+
+__Content Type__: application/json
+
+__Request body__:
+
+```
+{
+    "name": string,
+    "recipes": recipe_id[],
+    "uid": string,
+    "default": boolean
+}
+```
+
+__Response Type__: string
+
+__Response Body__:
+
+Success
+```
+"User created new book."
+```
+
+Fail
+```
+"error message"
+```
+
+### DELETE `/book`
+
+Deletes a book
+
+__Content Type__: application/json
+
+__Request body__:
+
+__TBD__
+
+
+### GET `/book/bookshelf`
+
+Retrieves list of books from the database
+
+__Content Type__: application/json
+
+__Request body__:
+
+```
+{
+    "bookshelf": book_id[]
+}
+```
+
+__Response Type__: json
+
+__Response Body__:
+
+Success
+```
+{
+    "book_id": {
+        name: string,
+        recipes: recipe_id[],
+        uid: string,
+        default: boolean
+    }
+}
+```
+
+Fail
+```
+"error message"
+```
+
+### POST `/book/newUser`
+
+Initialize the user's book when the user is new
+
+__Content Type__: application/json
+
+__Request body__:
+
+```
+{
+    "uid": string
+}
+```
+
+__Response Type__: string
+
+__Response Body__:
+
+Success
+```
+"User bookshelf has been setup."
+```
+
+Fail
+```
+"error message"
 ```
