@@ -30,7 +30,7 @@ const routes = (admin, dbRef) => {
              * req.body
              * {
              *      name: string,
-             *      recipes: string[],
+             *      recipes: recipe_id[],
              *      uid: string,
              *      default: boolean
              * 
@@ -97,7 +97,7 @@ const routes = (admin, dbRef) => {
                         res.end(`POST request create user: User update failed.`);
                     });
             
-                res.end(`Your bookshelf has been setup.`);
+                res.end(`User bookshelf has been setup.`);
             })
             .catch(err => {
                 console.log(err.message);

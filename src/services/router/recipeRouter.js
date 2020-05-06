@@ -15,7 +15,7 @@ const routes = (recipe, ingredient) => {
 
             var newRecipe = {};
 
-             res.end(JSON.stringify(recipe));
+            res.end(JSON.stringify(recipe));
         });
 
     Router.route('/getRecipe')

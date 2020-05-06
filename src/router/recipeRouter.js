@@ -16,6 +16,7 @@ const routes = (admin, dbRef) => {
              * {
              *      exclude_filter: string[],
              *      include_filter: string[],
+             *      category: string[],
              *      custom_token: string // optional and low priority
              * }
              */
@@ -23,17 +24,18 @@ const routes = (admin, dbRef) => {
             if (!req.body.exclude_filter || !req.body.include_filter) {
                 res.end(`Request body format incorrect: filter cannot be `
                     + `undefined.`);
-            }
-            const options = {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    exclude_filter: req.body.exclude_filter,
-                    include_filter: req.body.include_filter,
-                })
-            };
+            } else {
+                const options = {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        exclude_filter: req.body.exclude_filter,
+                        include_filter: req.body.include_filter,
+                    })
+                };
 
-            request.service(options, process.env.PORT1, res, 'filterRecipe');
+                request.service(options, process.env.PORT1, res, 'filterRecipe');
+            }
         });
     
     Router.route('/recipe/book')
@@ -93,7 +95,7 @@ const routes = (admin, dbRef) => {
 
                         dbRef.child(`book/${book_id}/${recipe_id}`).remove();
 
-                        res.end(`Recipe removed from book.`);
+                        res.end(`User removed recipe from book.`);
                     })
             }
         })
@@ -242,7 +244,7 @@ const routes = (admin, dbRef) => {
 
                         dbRef.child('recipe').update(updates);
 
-                        res.end(JSON.stringify(updates));
+                        res.end(`User edited a recipe.`);
                     })
                     .catch(err => {
                         console.log(err.message);
@@ -269,7 +271,7 @@ const routes = (admin, dbRef) => {
                     removed: true
                 });
 
-                res.end(`Recipe ${req.body.recipe_id} deleted`);
+                res.end(`User deleted a recipe.`);
             }
         });
 
