@@ -13,15 +13,22 @@ const routes = (admin, dbRef) => {
              * }
              */
 
-            const options = {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    bookshelf: req.body.bookshelf
-                })
-            };
+            if (!req.body.bookshelf) {
 
-            request.service(options, process.env.PORT2, res);
+                res.end(`Request body format incorrect: bookself not found.`);
+
+            } else {
+
+                const options = {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        bookshelf: req.body.bookshelf
+                    })
+                };
+
+                request.service(options, process.env.PORT2, res);
+            }
         });
     
     Router.route('/book')
@@ -31,33 +38,70 @@ const routes = (admin, dbRef) => {
              * {
              *      name: string,
              *      recipes: recipe_id[],
-             *      uid: string,
-             *      default: boolean
+             *      uid: string
              * 
              * }
              */
 
-            admin.auth().getUser(req.body.uid)
-                .then( userRecord => {
+            if (!req.body.name) {
 
-                    const newBookKey = dbRef.child('book').push().key;
+                res.end(`Request body format incorrect: name not found.`);
 
-                    dbRef.child('book/' + newBookKey).set({
-                        name: req.body.name,
-                        recipes: req.body.recipes,
-                        author: req.body.uid,
-                        default: false
-                    });
+            } else if (!req.body.recipes) {
 
-                    res.end(`Book created.`);
-                })
-                .catch( err => {
-                    res.end(`POST request create book: User authentication`
-                        + ` failed.`);
-                });  
+                res.end(`Request body format incorrect: recipes not found.`);
+
+            } else if (!req.body.uid) {
+
+                res.end(`Request body format incorrect: bookself not found.`);
+
+            } else {
+                admin.auth().getUser(req.body.uid)
+                    .then( userRecord => {
+
+                        const newBookKey = dbRef.child('book').push().key;
+
+                        dbRef.child('book/' + newBookKey).set({
+                            name: req.body.name,
+                            recipes: req.body.recipes,
+                            author: req.body.uid,
+                            default: false
+                        });
+
+                        res.end(`Book created.`);
+                    })
+                    .catch( err => {
+                        res.end(`POST request create book: User authentication`
+                            + ` failed.`);
+                    });  
+            }
         })
         .delete((req, res) => {
-            // TODO
+            /**
+             * req.body
+             * {
+             *      "uid": string,
+             *      "book_id": string
+             * }
+             */
+
+            if (!req.body.uid) {
+
+            } else if (!req.body.book_id) {
+                
+            } else {
+                
+                const options = {
+                    method: 'DELETE',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        uid: req.body.uid,
+                        book_id: req.body.book_id
+                    })
+                };
+
+                request.service(options, process.env.PORT2, res);
+            }
         });
 
     Router.route('/book/newUser')

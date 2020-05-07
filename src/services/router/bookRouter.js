@@ -1,6 +1,6 @@
 const express = require('express');
 
-const routes = (book) => {
+const routes = (dbRef, book) => {
     const Router = express.Router();
 
     Router.route('/')
@@ -19,7 +19,23 @@ const routes = (book) => {
             });
 
             res.end(JSON.stringify(book));
-        });
+        })
+        .delete((req, res) => {
+            /**
+             * req.body
+             * {
+             *      "uid": string,
+             *      "book_id": string
+             * }
+             */
+
+             if (book[req.body.book_id].uid === req.body.uid) {
+                dbRef.child('book/' + req.body.book_id).remove();
+                res.end(`User removed the book.`);
+             } else {
+                res.end(`User does not own the book.`)
+             }
+        })
 
     return Router;
 }

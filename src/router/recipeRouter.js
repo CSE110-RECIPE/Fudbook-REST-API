@@ -96,9 +96,9 @@ const routes = (admin, dbRef) => {
                         dbRef.child(`book/${book_id}/${recipe_id}`).remove();
 
                         res.end(`User removed recipe from book.`);
-                    })
+                    });
             }
-        })
+        });
 
     Router.route('/recipe')
         .post((req, res) => {
