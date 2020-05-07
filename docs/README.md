@@ -247,6 +247,8 @@ Fail
 "error message"
 ```
 
+---
+
 # Book Request
 
 ### POST `/book`
@@ -280,6 +282,8 @@ Fail
 "error message"
 ```
 
+---
+
 ### DELETE `/book`
 
 Deletes a book
@@ -308,6 +312,7 @@ Fail
 ```
 "User doesn't own the book"
 ```
+---
 
 ### GET `/book/bookshelf`
 
@@ -344,6 +349,8 @@ Fail
 "error message"
 ```
 
+---
+
 ### POST `/book/newUser`
 
 Initialize the user's book when the user is new
@@ -371,3 +378,5 @@ Fail
 ```
 "error message"
 ```
+
+---
