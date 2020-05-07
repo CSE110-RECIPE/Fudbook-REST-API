@@ -288,8 +288,26 @@ __Content Type__: application/json
 
 __Request body__:
 
-__TBD__
+```
+{
+    "uid": string,
+    "book_id": string
+}
+```
 
+__Response Type__: string
+
+__Response body__:
+
+Success
+```
+"User removed the book."
+```
+
+Fail
+```
+"User doesn't own the book"
+```
 
 ### GET `/book/bookshelf`
 
