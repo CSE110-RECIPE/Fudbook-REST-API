@@ -7,7 +7,7 @@ const routes = (admin, dbRef) => {
 
     const in_RAW = fs.readFileSync('./src/file/ingredients.json', 'utf8');
     const ingredient_list = JSON.parse(in_RAW);
-
+    console.log(JSON.stringify(ingredient_list));
     Router.route('/recipe/filter')
         .get((req, res) => {
 
