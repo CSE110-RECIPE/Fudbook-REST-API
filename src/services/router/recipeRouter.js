@@ -1,4 +1,5 @@
 const express = require('express');
+const filter = require('../../js/filter');
 
 const routes = (recipe, ingredient) => {
     const Router = express.Router();
@@ -13,9 +14,10 @@ const routes = (recipe, ingredient) => {
              * }
              */
 
-            var newRecipe = {};
+            var newRecipe = filter(ingredient, recipe,
+                req.body.include_filter, req.body.exclude_filter);
 
-            res.end(JSON.stringify(recipe));
+            res.end(JSON.stringify(newRecipe));
         });
 
     Router.route('/getRecipe')

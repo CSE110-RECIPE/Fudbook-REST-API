@@ -1,5 +1,5 @@
 /** Filter recipe algorithm */
-const filter = (ingredients, recipes, include_filter, exclude_filter) => {
+module.exports = (ingredients, recipes, include_filter, exclude_filter) => {
     //check whether filters exists   
     if(include_filter.length == 0 && exclude_filter.length == 0)
     {
