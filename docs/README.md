@@ -44,13 +44,16 @@ __Request body__:
 }
 ```
 
-__Response Type__: string
+__Response Type__: JSON
 
 __Response Body__:
 
 Success
 ```
-"User created a recipe"
+{
+    "recipe_id": string,
+    "message": "User created a recipe."
+}
 ```
 
 Fail

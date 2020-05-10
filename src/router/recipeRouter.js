@@ -189,7 +189,10 @@ const routes = (admin, dbRef) => {
                     /** Upload the new recipe */
                     dbRef.child('recipe/' + newRecipeKey ).set(newRecipe);
 
-                    res.end(`User created a recipe.`);
+                    res.end(JSON.stringify({
+                        recipe_id: newRecipeKey,
+                        message: "User created a recipe."
+                    }));
                 })
                 .catch(err => {
                     console.log(err.message);
@@ -212,9 +215,11 @@ const routes = (admin, dbRef) => {
              * }
              */
 
-             if (!req.body.uid) {
-                 res.end(`Request body format incorrect: uid not found.`);
-             } else {
+            if (!req.body.uid) {
+                res.end(`Request body format incorrect: uid not found.`);
+            } else if (!req.body.recipe_id) {
+                res.end(`Request body format incorrect: recipe not found.`);
+            } else {
 
                 admin.auth().getUser(req.body.uid)
                     .then(val => {
