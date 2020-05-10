@@ -25,7 +25,7 @@ const filter = (ingredients, recipes, include_filter, exclude_filter) => {
     {
       recipeList = exclude(ingredients, recipeArr, exclude_filter);
     }
-    //return recipes
+    
     return recipeList;
 }
 
@@ -49,7 +49,6 @@ const binary_search = (id, List) => {
           begin = m+1;
       }
     }
-
     return false;
 }
 
