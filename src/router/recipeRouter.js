@@ -8,7 +8,7 @@ const routes = (admin, dbRef) => {
 
     const in_RAW = fs.readFileSync('./src/file/ingredients.json', 'utf8');
     const ingredient_list = JSON.parse(in_RAW);
-
+    
     Router.route('/recipe/filter')
         .get((req, res) => {
 
@@ -17,29 +17,29 @@ const routes = (admin, dbRef) => {
              * {
              *      exclude_filter: string[],
              *      include_filter: string[],
+             *      category: string[],
              *      custom_token: string // optional and low priority
              * }
              */
-
             if (!req.body.exclude_filter || !req.body.include_filter) {
                 res.end(`Request body format incorrect: filter cannot be `
                     + `undefined.`);
-            }
-            const options = {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    exclude_filter: req.body.exclude_filter,
-                    include_filter: req.body.include_filter,
-                })
-            };
+            } else {
+                const options = {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        exclude_filter: req.body.exclude_filter,
+                        include_filter: req.body.include_filter,
+                    })
+                };
 
-            request.service(options, process.env.PORT1, res, 'filterRecipe');
+                request.service(options, process.env.PORT1, res, 'filterRecipe');
+            }
         });
     
     Router.route('/recipe/book')
         .get((req, res) => {
-            console.log("in recipe book");
 
             /**
              * req.body
@@ -95,10 +95,10 @@ const routes = (admin, dbRef) => {
 
                         dbRef.child(`book/${book_id}/${recipe_id}`).remove();
 
-                        res.end(`Recipe removed from book.`);
-                    })
+                        res.end(`User removed recipe from book.`);
+                    });
             }
-        })
+        });
 
     Router.route('/recipe')
         .post((req, res) => {
@@ -189,7 +189,10 @@ const routes = (admin, dbRef) => {
                     /** Upload the new recipe */
                     dbRef.child('recipe/' + newRecipeKey ).set(newRecipe);
 
-                    res.end(`User created a recipe.`);
+                    res.end(JSON.stringify({
+                        recipe_id: newRecipeKey,
+                        message: "User created a recipe."
+                    }));
                 })
                 .catch(err => {
                     console.log(err.message);
@@ -212,9 +215,11 @@ const routes = (admin, dbRef) => {
              * }
              */
 
-             if (!req.body.uid) {
-                 res.end(`Request body format incorrect: uid not found.`);
-             } else {
+            if (!req.body.uid) {
+                res.end(`Request body format incorrect: uid not found.`);
+            } else if (!req.body.recipe_id) {
+                res.end(`Request body format incorrect: recipe not found.`);
+            } else {
 
                 admin.auth().getUser(req.body.uid)
                     .then(val => {
@@ -244,7 +249,7 @@ const routes = (admin, dbRef) => {
 
                         dbRef.child('recipe').update(updates);
 
-                        res.end(JSON.stringify(updates));
+                        res.end(`User edited a recipe.`);
                     })
                     .catch(err => {
                         console.log(err.message);
@@ -271,7 +276,7 @@ const routes = (admin, dbRef) => {
                     removed: true
                 });
 
-                res.end(`Recipe ${req.body.recipe_id} deleted`);
+                res.end(`User deleted a recipe.`);
             }
         });
 

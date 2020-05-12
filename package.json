@@ -30,7 +30,6 @@
     "nodemon": "^2.0.3"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.5.10",
     "jasmine": "^3.5.0",
     "nyc": "^15.0.1",
     "rest-assured": "^0.1.0",

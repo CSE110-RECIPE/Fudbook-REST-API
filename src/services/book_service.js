@@ -28,7 +28,7 @@ dbRef.child('book').once('value').then(snapshot => {
     const book = snapshot.val();
 
     /** Load Router */
-    app.use('/', bookServiceRouter(book));
+    app.use('/', bookServiceRouter(dbRef, book));
 });
 
 app.listen(process.env.PORT2, () => { 
