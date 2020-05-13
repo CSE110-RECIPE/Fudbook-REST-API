@@ -6,7 +6,7 @@
   "scripts": {
     "start": "./admin_script.sh development",
     "serve": "./admin_script.sh production",
-    "test": "./node_modules/jasmine/bin/jasmine.js --config=jasmine.json",
+    "test": "node test.js",
     "coverage": "nyc -r text -e .ts -x \"tests/*.test.ts\" npm run test"
   },
   "repository": {
