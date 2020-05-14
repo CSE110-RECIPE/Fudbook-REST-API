@@ -11,7 +11,7 @@ module.exports = (ingredients, recipes, include_filter, exclude_filter) => {
     //if include filter is empty, then perform exclude on all recipes
     if(include_filter.length == 0)
     {
-      recipeList = exclude(ingredients,recipeList, exclude_filter);
+      recipeList = exclude(ingredients,recipes, exclude_filter);
       return recipeList;
     }
 
