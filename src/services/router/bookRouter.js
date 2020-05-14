@@ -18,7 +18,7 @@ const routes = (dbRef, book) => {
                 bookList[item] = book[item];
             });
 
-            res.end(JSON.stringify(book));
+            res.end(JSON.stringify(bookList));
         })
         .delete((req, res) => {
             /**
