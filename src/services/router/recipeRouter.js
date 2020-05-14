@@ -14,6 +14,8 @@ const routes = (recipe, ingredient) => {
              * }
              */
 
+            // the algorithm returns matching key value and element.
+
              var newRecipe = filter(ingredient, recipe,
                 req.body.include_filter, req.body.exclude_filter);
 

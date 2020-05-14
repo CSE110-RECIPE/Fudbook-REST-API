@@ -53,7 +53,8 @@ describe('Include test', () => {
         const res = await axios(options);
 
         // Check size
-        expect(Object.keys(res.data).length).toBe(8);
+        expect(Object.keys(res.data).length).toBe(1);
+        expect(res.data['1']).toBe('1');
     });
 
     it('3 item test', async() => {
@@ -71,7 +72,7 @@ describe('Include test', () => {
         const res = await axios(options);
 
         // Check size
-        expect(Object.keys(res.data).length).toBe(9);
+        expect(Object.keys(res.data).length).toBe(0);
     });
 });
 
