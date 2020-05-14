@@ -1,102 +1,91 @@
 /** Filter recipe algorithm */
 module.exports = (ingredients, recipes, include_filter, exclude_filter) => {
+    var recipeList = {};
+
     //check whether filters exists   
     if(include_filter.length == 0 && exclude_filter.length == 0)
     {
-      return recipes;
+      return recipeList;
     }
 
     //if include filter is empty, then perform exclude on all recipes
     if(include_filter.length == 0)
     {
-      const keys = Object.keys(recipes);
-      recipeArr = keys.map(Number);
-      recipeList = exclude(ingredients,recipeArr, exclude_filter);
+      recipeList = exclude(ingredients,recipes, exclude_filter);
       return recipeList;
     }
 
-    var recipeList = {}
     //add common recipes using include filter
-    recipeList = include(ingredients, recipeList, include_filter);
-
-    var recipeArr = Object.values(recipeList);
+    recipeList = include(ingredients, recipes, include_filter);
+    
     //remove recipes using exclude filter
     if(exclude_filter.length != 0)
     {
-      recipeList = exclude(ingredients, recipeArr, exclude_filter);
+      recipeList = exclude(ingredients, recipeList, exclude_filter);
     }
-    
+
     return recipeList;
 }
 
-/**Search for recipe algorithm */
-const binary_search = (id, List) => {
-    begin = 0;
-    end = List.length;
-    while(begin < end)
-    {
-      m = parseInt((begin+end)/2);
-      if(List[m][1] == id)
-      {
-        return true;
-      }
-      else if (id < List[m][1])
-      {
-          end = m;
-      }
-      else
-      {
-          begin = m+1;
-      }
-    }
-    return false;
-}
-
 /**Adds recipes using include filter */
-const include = (ingredients, recipeList, include_filter) => {
+const include = (ingredients, recipes, include_filter) => {
     //initialize list with first ingredient's recipes
-    for(var i=0; i<ingredients[include_filter[0]].length; i++)
+    var ingr = include_filter[0];
+    var recipeNum;
+    var recipeList={};
+    
+    for(var key in ingredients[ingr])
     {
-      var recipeNum = ingredients[include_filter[0]][i][1];
-      recipeList[recipeNum] = recipeNum;
+        recipeNum = ingredients[ingr][key];
+        recipeList[recipeNum] = recipes[recipeNum];
     }
 
     //find recipes that share common ingredients and remove duplicates
     for(var i=1; i<include_filter.length; i++)
     {
-        const tempList = ingredients[include_filter[i]];
+        ingr = include_filter[i];
+        const tempList = ingredients[ingr];
         const intersect = {};
-        //go through each ingredient's recipes and add to list
-        for(var j=0; j< tempList.length; j++)
+        //go through each ingredient's recipes and add to list if common ingredient
+        for(var key in tempList)
         {
-          if(tempList[j][1] in recipeList)
+          if(tempList[key] in recipeList)
           {
-            recipeNum = tempList[j][1];
-            intersect[recipeNum] = recipeNum;
+            recipeNum = tempList[key];
+            intersect[recipeNum] = recipes[recipeNum];
           }
         }
         recipeList = intersect;
     }
+    
     return recipeList;
 }
 
 /**Removes recipes using exclude filter*/
-const exclude = (ingredients, recipeArr, exclude_filter) => {
-  //remove recipes with any ingredients in exclude_filter
+const exclude = (ingredients, recipeList, exclude_filter) => {
+    var ingr;
+    var recipeNum;
+   
+    //remove recipes with any ingredients in exclude_filter
     for(var i=0; i<exclude_filter.length; i++)
     {
-      //get list of recipes that contains this specific ingredient
-      const excludeList = ingredients[exclude_filter[i]];
-      const validRecipes = {};
-      for(var j=0; j<recipeArr.length; j++)
+      ingr = exclude_filter[i];
+      //get list of recipes that contains this specific ingredient to exclude
+      const excludeList = ingredients[ingr];
+      const values = Object.values(excludeList);
+      const excludeArr = values.map(String);
+      const validList = {};
+      //find valid recipes in recipeList and remove invalid ones
+      for(var key in recipeList)
       {
-        if(!(binary_search(recipeArr[j], excludeList)))
+        //if recipe is not found in exclude recipes then it is valid
+        if(!(excludeArr.indexOf(key) > -1))
         {
-          validRecipes[recipeArr[j]] = recipeArr[j];
+          validList[key] = recipeList[key];
         }
       }
-      var List = validRecipes;
-      recipeArr = Object.values(List);
+      recipeList = validList;
     }
-    return List;
+
+    return recipeList;
 }
