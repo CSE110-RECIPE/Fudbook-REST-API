@@ -3,7 +3,6 @@ const request = require('../js/request');
 const fs = require('fs');
 
 const routes = (admin, dbRef) => {
-    console.log("in recipe router")
     const Router = express.Router();
 
     const in_RAW = fs.readFileSync('./src/file/ingredients.json', 'utf8');
