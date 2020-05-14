@@ -6,6 +6,10 @@
   "scripts": {
     "start": "./admin_script.sh development",
     "serve": "./admin_script.sh production",
+    "build-ts": "./node_modules/.bin/tsc",
+    "test": "node test.js",
+    "coverage": "nyc -r text -e .ts -x \"tests/*.test.ts\" npm run test",
+    "rest-assured": "rest-assured",
     "test": "node test.js",
     "coverage": "nyc -r text -e .ts -x \"tests/*.test.ts\" npm run test"
   },

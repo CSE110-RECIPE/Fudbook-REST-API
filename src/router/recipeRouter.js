@@ -20,7 +20,6 @@ const routes = (admin, dbRef) => {
              *      custom_token: string // optional and low priority
              * }
              */
-
             if (!req.body.exclude_filter || !req.body.include_filter) {
                 res.end(`Request body format incorrect: filter cannot be `
                     + `undefined.`);
