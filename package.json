@@ -7,7 +7,7 @@
     "start": "./admin_script.sh development",
     "serve": "./admin_script.sh production",
     "build-ts": "./node_modules/.bin/tsc",
-    "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json",
+    "test": "node test.js",
     "coverage": "nyc -r text -e .ts -x \"tests/*.test.ts\" npm run test",
     "rest-assured": "rest-assured",
     "test": "node test.js",
