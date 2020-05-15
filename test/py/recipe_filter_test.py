@@ -5,7 +5,8 @@ url = 'http://localhost:3000/recipe/filter'
 data = { 'exclude_filter': [ 'beans' ],
          'include_filter': [ 'chicken' ] }
 
-response = json.loads(requests.get(url = url, data = data).text)
+raw_response = requests.get(url = url, data = data)
+response = raw_response.text
 
 try:
     for recipe_id, recipe in response.items():
