@@ -1,4 +1,20 @@
-# Errors I noted:
+# TESTING SESSION 2[current]:
+
+## Errors I noted:
+
+### Some requests require more than one element while one should be okay
+- Interestingly, it seems like some requests that require lists don't work unless multiple elements are specified.
+- We `one_arg_test.py` as an example.
+- Note that `bad_response` in `one_arg_test.py` gets the `Unexpected token < in JSON at position 0` error that we were seeing.
+
+## Other things:
+- I think I mentioned this to you on Thursday, but deleting a recipe from the database does not delete that recipe's entry in the ingredients database. In for example, in `recipe_test.py` the recipe ID will remain in the `cheese` ingredient list (on Firebase) even after deletion. I think you mentioned this was okay, but I just wanted to remind you to double-check.
+
+
+
+# TESTING SESSION 1 [outdated]:
+
+## Errors I noted:
 
 ### The filter algorithm seems like it doesn't work yet
 - Check `recipe_filter_test.py`
