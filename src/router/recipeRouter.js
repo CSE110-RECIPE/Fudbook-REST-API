@@ -133,10 +133,6 @@ const routes = (admin, dbRef) => {
 
                 res.end(`Request body format incorrect: ingredients not found.`);
 
-            } else if (!req.body.categories) {
-
-                res.end(`Request body format incorrect: categories not found.`);
-
             } else if (!req.body.steps) {
 
                 res.end(`Request body format incorrect: steps not found.`);
@@ -207,7 +203,6 @@ const routes = (admin, dbRef) => {
              *      "uid": string,
              *      "recipe_id": string,
              *      "name": string,
-             *      "ingredients": string[],
              *      "categories": string[],
              *      "steps": string[],
              *      "image": string,
@@ -227,11 +222,6 @@ const routes = (admin, dbRef) => {
                         if (req.body.name && req.body.name !== '')
                             updates[req.body.recipe_id + '/name'] 
                                 = req.body.name;
-
-                        if (req.body.ingredients 
-                                && req.body.ingredients.length !== 0 )
-                            updates[req.body.recipe_id + '/ingredients'] 
-                                = req.body.ingredients;
 
                         if (req.body.categories 
                                 && req.body.categories.length !== 0 )

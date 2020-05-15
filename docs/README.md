@@ -36,7 +36,6 @@ __Request body__:
     "uid": string,
     "name": string,
     "ingredients": string[],
-    "categories": string[],
     "steps": string[],
     "image": string,
     "author": string,
@@ -77,7 +76,6 @@ __Request body__:
     "recipe_id": string,
     "name": string,
     "ingredients": string[],
-    "categories": string[],
     "steps": string[],
     "image": string,
     "editor": string

@@ -2,8 +2,6 @@ const express = require('express');
 const admin = require('firebase-admin');
 const fs = require('fs');
 
-const recipeServiceRouter = require('./router/recipeRouter');
-
 /** Initialize firebase admin */
 const securedPath = './fudbook-b3184-firebase-adminsdk-oj6pw-e9861767b6.json';
 const serviceAccount = JSON.parse(fs.readFileSync(securedPath, 'utf8'));
@@ -24,17 +22,52 @@ app.use(express.urlencoded({
 /** Initialize database */
 const dbRef = admin.database().ref();
 
-dbRef.child('recipe').once('value')
-  .then(snapshot => {
-    const recipe = snapshot.val();
+var recipe = undefined;
+var ingredient = undefined;
+
+dbRef.child('recipe').on('value', snapshot => {
+    recipe = snapshot.val();
 
     dbRef.child('ingredient').once('value')
       .then(snapshot => {
-        const ingredient = snapshot.val();
-
-        app.use('/', recipeServiceRouter(recipe, ingredient));
+        ingredient = snapshot.val();
     });
 });
+
+app.post('/filterRecipe', (req, res) => {
+    /**
+     * req.body
+     * {
+     *      exclude_filter: string[],
+     *      include_filter: string[]
+     * }
+     */
+
+    // the algorithm returns matching key value and element.
+
+     var newRecipe = filter(ingredient, recipe,
+        req.body.include_filter, req.body.exclude_filter);
+
+    res.end(JSON.stringify(newRecipe));
+});
+
+app.post('/getRecipe', (req, res) => {
+    /**
+     * req.body
+     * {
+     *    recipes: recipe_id[]
+     * }
+     */
+
+    var newRecipe = {};
+
+    req.body.recipes.forEach(id => {
+        newRecipe[`${id}`] = recipe[`${id}`]
+    });
+
+    res.end(JSON.stringify(newRecipe));
+});
+
 
 app.listen(process.env.PORT1, () => { 
   console.log(`Recipe microservice started on port: ${process.env.PORT1}`);
