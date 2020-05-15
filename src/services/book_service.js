@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({
   extended: true
 }));
-
+ 
 /** Initialize database */
 const dbRef = admin.database().ref();
 

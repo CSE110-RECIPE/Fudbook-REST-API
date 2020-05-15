@@ -29,11 +29,11 @@ const routes = (dbRef, book) => {
              * }
              */
 
-             if (book[req.body.book_id].uid === req.body.uid) {
+             if (book[`${req.body.book_id}`] && book[`${req.body.book_id}`].author === req.body.uid) {
                 dbRef.child('book/' + req.body.book_id).remove();
-                res.end(`User removed the book.`);
+                res.end(JSON.stringify({message:`User removed the book.`}));
              } else {
-                res.end(`User does not own the book.`)
+                res.end(JSON.stringify({message:`User does not own the book.`}));
              }
         })
 

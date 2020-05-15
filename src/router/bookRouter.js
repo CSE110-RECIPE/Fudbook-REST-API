@@ -86,9 +86,9 @@ const routes = (admin, dbRef) => {
              */
 
             if (!req.body.uid) {
-
+                res.end('Incorrect format');
             } else if (!req.body.book_id) {
-                
+                res.end('Incorrect format');
             } else {
                 
                 const options = {
