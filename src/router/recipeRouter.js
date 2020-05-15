@@ -261,11 +261,16 @@ const routes = (admin, dbRef) => {
             if (!req.body.uid)
                 res.end(`Request body format incorrect: uid not found.`);
             else {
-                dbRef.child('recipe').child(req.body.recipe_id).set({
-                    removed: true
-                });
+                const options = {
+                    method: 'DELETE',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        uid: req.body.uid,
+                        recipe_id: req.body.recipe_id
+                    })
+                };
 
-                res.end(`User deleted a recipe.`);
+                request.service(options, process.env.PORT1, res);
             }
         });
 

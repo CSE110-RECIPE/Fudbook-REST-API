@@ -68,6 +68,36 @@ app.post('/getRecipe', (req, res) => {
     res.end(JSON.stringify(newRecipe));
 });
 
+app.delete('/', (req, res) => {
+  /**
+   * req.body
+   * {
+   *    "uid": string,
+   *    "recipe_id": string
+   * }
+   */
+
+  if (req.body.uid === recipe[req.body.recipe_id].author) {
+    var ingredientUpdate = {}
+
+    recipe[req.body.recipe_id].tags.forEach(i => {
+      Object.keys(ingredient[i]).forEach(jKeys => {
+        if (ingredient[i][jKeys] === req.body.recipe_id)
+          ingredientUpdate[i + '/' + jKeys] = null;
+      });
+    });
+
+    dbRef.child('ingredient').update(ingredientUpdate);
+
+    dbRef.child('recipe/' + req.body.recipe_id).set({removed: true});
+
+    res.end(JSON.stringify({message: `${req.body.recipe_id} has been removed`}));
+
+  } else {
+    res.end(JSON.stringify({message: 'User unauthorized: req.body.uid does not match.'}));
+  }
+});
+
 
 app.listen(process.env.PORT1, () => { 
   console.log(`Recipe microservice started on port: ${process.env.PORT1}`);
