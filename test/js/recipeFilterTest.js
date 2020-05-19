@@ -54,25 +54,6 @@ describe('Include test', () => {
 
         // Check size
         expect(Object.keys(res.data).length).toBe(1);
-        expect(res.data['1']).toBe('1');
-    });
-
-    it('Invalid filter test', async() => {
-        const options = {
-            method: 'get',
-            baseURL: 'http://localhost:3000/',
-            url: '/recipe/filter',
-            headers: {'Content-Type': 'application/json'},
-            data: {
-                exclude_filter: [],
-                include_filter: ["bread","chicken","garlic", "tomato"]
-            }
-        };
-
-        const res = await axios(options);
-
-        // Check size
-        expect(Object.keys(res.data).length).toBe(0);
     });
 });
 
@@ -92,7 +73,7 @@ describe("Exclude Test", () => {
         const res = await axios(options);
 
         // Check size
-        expect(Object.keys(res.data).length).toBe(34);
+        expect(Object.keys(res.data).length).toBe(28);
     })
 
     it("2 exclude filter test", async() => {
@@ -110,7 +91,7 @@ describe("Exclude Test", () => {
         const res = await axios(options);
 
         // Check size
-        expect(Object.keys(res.data).length).toBe(32);
+        expect(Object.keys(res.data).length).toBe(26);
     })
 
     it("3 exclude filter test", async() => {
@@ -128,25 +109,7 @@ describe("Exclude Test", () => {
         const res = await axios(options);
 
         // Check size
-        expect(Object.keys(res.data).length).toBe(30);
-    })
-
-    it("exclude filter test invalid", async() => {
-        const options = {
-            method: 'get',
-            baseURL: 'http://localhost:3000/',
-            url: '/recipe/filter',
-            headers: {'Content-Type': 'application/json'},
-            data: {
-                exclude_filter: ["Jerome"],
-                include_filter: []
-            }
-        };
-
-        const res = await axios(options);
-
-        // Check size
-        expect(Object.keys(res.data).length).toBe(39);
+        expect(Object.keys(res.data).length).toBe(24);
     })
 })
 
@@ -167,24 +130,6 @@ describe("Include Exclude Test", () => {
 
         // Check size
         expect(Object.keys(res.data).length).toBe(2);
-    })
-
-    it("1 include invalid exclude", async() => {
-        const options = {
-            method: 'get',
-            baseURL: 'http://localhost:3000/',
-            url: '/recipe/filter',
-            headers: {'Content-Type': 'application/json'},
-            data: {
-                exclude_filter: ["soy"],
-                include_filter: ["bread"]
-            }
-        };
-
-        const res = await axios(options);
-
-        // Check size
-        expect(Object.keys(res.data).length).toBe(3);
     })
 
     it("2 include 1 exclude", async() => {
