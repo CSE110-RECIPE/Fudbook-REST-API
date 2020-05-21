@@ -38,7 +38,7 @@ const routes = (admin, dbRef) => {
         });
     
     Router.route('/recipe/book')
-        .get((req, res) => {
+        .post((req, res) => {
 
             /**
              * req.body

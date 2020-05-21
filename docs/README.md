@@ -8,16 +8,16 @@
         * [PUT](#put-recipe) 
         * [DELETE](#delete-recipe)
     * Route `/recipe/filter` 
-        * [GET](#get-recipefilter)
+        * [POST](#get-recipefilter)
     * Route `/recipe/book` 
-        * [GET](#get-recipebook) 
+        * [POST](#get-recipebook) 
         * [DELETE](#delete-recipebook)
 2. Book Request
     * Route `/book`
         * [POST](#post-book)
         * [DELETE](#delete-book)
     * Route `/book/bookshelf`
-        * [GET](#get-bookbookshelf)
+        * [POST](#get-bookbookshelf)
     * Route `/book/newUser`
         * [POST](#post-booknewUser)
 
@@ -128,7 +128,7 @@ Fail
 
 ---
 
-### GET `/recipe/filter`
+### POST `/recipe/filter`
 
 Retrieve recipes in the database that matches the ingredient preferences
 
@@ -173,9 +173,9 @@ Fail
 
 ---
 
-### GET `/recipe/book`
+### POST `/recipe/book`
 
-GET request
+POST request
 
 Retrieve a list of recipes
 
@@ -315,7 +315,7 @@ Fail
 ```
 ---
 
-### GET `/book/bookshelf`
+### POST `/book/bookshelf`
 
 Retrieves list of books from the database
 
