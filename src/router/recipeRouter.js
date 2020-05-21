@@ -9,7 +9,7 @@ const routes = (admin, dbRef) => {
     const ingredient_list = JSON.parse(in_RAW);
     
     Router.route('/recipe/filter')
-        .get((req, res) => {
+        .post((req, res) => {
 
             /**
              * req.body
@@ -20,7 +20,7 @@ const routes = (admin, dbRef) => {
              *      custom_token: string // optional and low priority
              * }
              */
-            if (!req.body.exclude_filter || !req.body.include_filter) {
+            if (req.body.exclude_filter === undefined && req.body.include_filter === undefined) {
                 res.end(`Request body format incorrect: filter cannot be `
                     + `undefined.`);
             } else {
@@ -162,6 +162,8 @@ const routes = (admin, dbRef) => {
                     var newRecipe = req.body;
                     var tags = [];
                     var tagsUpdate = {};
+
+                    console.log(req.body.ingredients);
 
                     Object.keys(ingredient_list).forEach(key => {
                         ingredient_list[key].forEach(item => {
