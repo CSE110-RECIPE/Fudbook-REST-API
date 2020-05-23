@@ -5,7 +5,7 @@ const routes = (admin, dbRef) => {
     const Router = express.Router();
 
     Router.route('/book/bookshelf')
-        .get((req, res) => {
+        .post((req, res) => {
             /**
              * req.body
              * {
