@@ -68,6 +68,10 @@ const routes = (admin, dbRef) => {
                             default: false
                         });
 
+                        dbRef.child('user/' + req.body.uid + '/other').update({
+                            [newBookKey]: newBookKey
+                        });
+
                         res.end(`Book created.`);
                     })
                     .catch( err => {
@@ -104,6 +108,9 @@ const routes = (admin, dbRef) => {
             }
         });
 
+    /**
+     * TODO: Need to reroute
+     */
     Router.route('/book/newUser')
         .post((req, res) => {
             /**
@@ -132,14 +139,11 @@ const routes = (admin, dbRef) => {
                     default: true
                 });
             
-                admin.auth().updateUser(req.body.uid, {
-                    favorite_book: newFavoriteKey,
-                    my_book: newPersonalBookKey
+                dbRef.child('user/' + req.body.uid).set({
+                    favorite: newFavoriteKey,
+                    personal: newPersonalBookKey,
+                    other: []
                 })
-                    .catch(err => {
-                        console.log(err.message);
-                        res.end(`POST request create user: User update failed.`);
-                    });
             
                 res.end(`User bookshelf has been setup.`);
             })
