@@ -23,12 +23,16 @@ app.use(express.urlencoded({
 /** Initialize database */
 const dbRef = admin.database().ref();
 
+var bookPointer = {
+  book: undefined
+};
+
 /** Load recipe database */
-dbRef.child('book').once('value').then(snapshot => {
-    const book = snapshot.val();
+dbRef.child('book').on('value', snapshot => {
+    bookPointer.book = snapshot.val();
 
     /** Load Router */
-    app.use('/', bookServiceRouter(dbRef, book));
+    app.use('/', bookServiceRouter(dbRef, bookPointer));
 });
 
 app.listen(process.env.PORT2, () => { 

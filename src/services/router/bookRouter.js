@@ -1,7 +1,8 @@
 const express = require('express');
 
-const routes = (dbRef, book) => {
+const routes = (dbRef, bookPtr) => {
     const Router = express.Router();
+    var book = bookPtr.book;
 
     Router.route('/')
         .post((req, res) => {

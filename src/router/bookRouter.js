@@ -108,9 +108,6 @@ const routes = (admin, dbRef) => {
             }
         });
 
-    /**
-     * TODO: Need to reroute
-     */
     Router.route('/book/newUser')
         .post((req, res) => {
             /**
@@ -152,6 +149,21 @@ const routes = (admin, dbRef) => {
                 res.end(`POST request create user: User authentication failed.`);
             });
         });
+
+    Router.route('/book/user')
+        .post((req, res) => {
+            /**
+             * req.body 
+             * {
+             *      "uid": string
+             * }
+             */
+
+            dbRef.child('user/' + req.body.uid).once('value')
+                .then(snap => {
+                    res.end(JSON.stringify(snap.val()));
+                });
+        })
     
     return Router;
 }
