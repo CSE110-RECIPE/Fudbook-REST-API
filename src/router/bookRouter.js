@@ -181,9 +181,9 @@ const routes = (admin, dbRef) => {
                 data[recipeId] = recipeId;
             })
 
-            dbRef.child('book/' + req.body.book_id).update(data);
+            dbRef.child('book/' + req.body.book_id + '/recipes').update(data);
 
-            res.end(`user added recipes to book.`);
+            res.end(JSON.stringify({message: `user added recipes to book.`}));
         })
         .delete((req, res) => {
              /**
