@@ -163,7 +163,41 @@ const routes = (admin, dbRef) => {
                 .then(snap => {
                     res.end(JSON.stringify(snap.val()));
                 });
+        });
+
+    Router.route('/book/recipe')
+        .post((req, res) => {
+            /**
+             * req.body 
+             * {
+             *      "book_id": string,
+             *      "recipes": recipe_id[]
+             * }
+             */
+
+            var data = {};
+
+            req.body.recipes.forEach(recipeId => {
+                data[recipeId] = recipeId;
+            })
+
+            dbRef.child('book/' + req.body.book_id).update(data);
+
+            res.end(`user added recipes to book.`);
         })
+        .delete((req, res) => {
+             /**
+             * req.body 
+             * {
+             *      "book_id": string,
+             *      "recipeId": string
+             * }
+             */
+
+            dbRef.child('book/' + req.body.book_id + '/' + req.body.recipesId).remove();
+        })
+
+    
     
     return Router;
 }

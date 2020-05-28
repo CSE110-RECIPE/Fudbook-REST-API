@@ -115,12 +115,6 @@ const routes = (admin, dbRef) => {
              * }
              */
 
-            /**
-             * TODO:
-             * Add ingredient.json
-             * Add the recipe_id to each corresponding ingredients
-             */
-
             if (!req.body.uid) {
 
                 res.end(`Request body format incorrect: uid not found.`);
@@ -155,10 +149,6 @@ const routes = (admin, dbRef) => {
                 .then(userRecord => {
                     const newRecipeKey = dbRef.child('recipe').push().key;
 
-                    dbRef.child('book/' + userRecord.my_book + '/recipes').set({
-                        newRecipeKey: newRecipeKey
-                    });
-
                     var newRecipe = req.body;
                     var tags = [];
                     var tagsUpdate = {};
@@ -185,6 +175,16 @@ const routes = (admin, dbRef) => {
 
                     /** Upload the new recipe */
                     dbRef.child('recipe/' + newRecipeKey ).set(newRecipe);
+
+                    dbRef.child('user/' + req.body.uid + '/personal')
+                        .once('value').then(snap => {
+                            const bookId = snap.val();
+
+                            dbRef.child('book/' + bookId + '/recipes').update({
+                                [newRecipeKey]: newRecipeKey
+                            })
+                        });
+                
 
                     res.end(JSON.stringify({
                         recipe_id: newRecipeKey,
