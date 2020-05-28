@@ -32,8 +32,9 @@ dbRef.child('book').on('value', snapshot => {
     bookPointer.book = snapshot.val();
 
     /** Load Router */
-    app.use('/', bookServiceRouter(dbRef, bookPointer));
 });
+
+app.use('/', bookServiceRouter(dbRef, bookPointer));
 
 app.listen(process.env.PORT2, () => { 
   console.log(`Book microservice started on port: ${process.env.PORT2}`);
