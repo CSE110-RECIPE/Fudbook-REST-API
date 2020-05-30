@@ -2,7 +2,6 @@ const express = require('express');
 
 const routes = (dbRef, bookPtr) => {
     const Router = express.Router();
-    var book = bookPtr.book;
 
     Router.route('/')
         .post((req, res) => {
@@ -16,7 +15,7 @@ const routes = (dbRef, bookPtr) => {
             var bookList = {};
 
             req.body.bookshelf.forEach(item => {
-                bookList[item] = book[item];
+                bookList[item] = bookPtr.book[item];
             });
 
             res.end(JSON.stringify(bookList));
@@ -30,7 +29,7 @@ const routes = (dbRef, bookPtr) => {
              * }
              */
 
-             if (book[`${req.body.book_id}`] && book[`${req.body.book_id}`].author === req.body.uid) {
+             if (bookPtr.book[`${req.body.book_id}`] && bookPtr.book[`${req.body.book_id}`].author === req.body.uid) {
                 dbRef.child('book/' + req.body.book_id).remove();
                 dbRef.child('user/' + req.body.uid + '/other/' + req.body.book_id).remove();
                 res.end(JSON.stringify({message:`User removed the book.`}));
