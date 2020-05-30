@@ -4,6 +4,11 @@ const filter = require('../../js/filter');
 const routes = (dbRef, container) => {
     const Router = express.Router();
 
+    Router.route('/topRecipe')
+      .get((req, res) => {
+        res.end(JSON.stringify({topRecipe: container.recipe[50]}));
+      })
+
     Router.route('/filterRecipe')
       .post((req, res) => {
         /**

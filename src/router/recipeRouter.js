@@ -7,6 +7,15 @@ const routes = (admin, dbRef) => {
 
     const in_RAW = fs.readFileSync('./src/file/ingredients.json', 'utf8');
     const ingredient_list = JSON.parse(in_RAW);
+
+    Router.route('/recipe/recommended')
+        .get((req, res) => {
+            const options = {
+                method: 'GET'
+            };
+
+            request.service(options, process.env.PORT1, res, 'topRecipe');
+        })
     
     Router.route('/recipe/filter')
         .post((req, res) => {
