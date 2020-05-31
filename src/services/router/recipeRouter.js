@@ -6,7 +6,7 @@ const routes = (dbRef, container) => {
 
     Router.route('/topRecipe')
       .get((req, res) => {
-        res.end(JSON.stringify({topRecipe: container.recipe[50]}));
+        res.end(JSON.stringify({topRecipe: container.recipe[69]}));
       })
 
     Router.route('/filterRecipe')
