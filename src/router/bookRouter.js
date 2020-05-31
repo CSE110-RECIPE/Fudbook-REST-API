@@ -178,7 +178,7 @@ const routes = (admin, dbRef) => {
             var data = {};
 
             req.body.recipes.forEach(recipeId => {
-                data[recipeId] = recipeId;
+                data[`${recipeId}`] = recipeId;
             })
 
             dbRef.child('book/' + req.body.book_id + '/recipes').update(data);
