@@ -70,7 +70,9 @@ const routes = (admin, dbRef) => {
                 request.service(options, process.env.PORT1, res, 'getRecipe');
             }
         })
-        .delete((req, res) => {
+
+    Router.route('/recipe/book/delete')
+        .post((req, res) => {
 
             /**
              * req.body
@@ -82,16 +84,15 @@ const routes = (admin, dbRef) => {
              */
             
             if (!req.body.uid) {
-
-                res.end(`Request body format incorrect: uid not found.`);
+                res.end(JSON.stringify({message: `Request body format incorrect: uid not found.`}));
 
             } else if (!req.body.book_id) {
 
-                res.end(`Request body format incorrect: book_id not found.`);
+                res.end(JSON.stringify({message: `Request body format incorrect: book_id not found.`}));
 
-            } else if (!req.recipe_id) {
+            } else if (!req.body.recipe_id) {
                 
-                res.end(`Request body format incorrect: recipe_id not found.`);
+                res.end(JSON.stringify({message: `Request body format incorrect: recipe_id not found.`}));
 
             } else {
 
@@ -101,9 +102,9 @@ const routes = (admin, dbRef) => {
                         const book_id = req.body.book_id;
                         const recipe_id = req.body.recipe_id;
 
-                        dbRef.child(`book/${book_id}/${recipe_id}`).remove();
+                        dbRef.child(`book/${book_id}/recipes/${recipe_id}`).remove();
 
-                        res.end(`User removed recipe from book.`);
+                        res.end(JSON.stringify({message:`User removed recipe from book.`}));
                     });
             }
         });
