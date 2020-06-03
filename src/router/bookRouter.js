@@ -1,7 +1,9 @@
 const express = require('express');
 const request = require('../js/request');
 
-const routes = (admin, dbRef) => {
+const bookModel = require('../model/bookModel');
+
+const routes = () => {
     const Router = express.Router();
 
     Router.route('/book/bookshelf')
@@ -56,28 +58,15 @@ const routes = (admin, dbRef) => {
                 res.end(`Request body format incorrect: bookself not found.`);
 
             } else {
-                admin.auth().getUser(req.body.uid)
-                    .then( userRecord => {
+                const response = bookModel.createBook(req.body);
 
-                        const newBookKey = dbRef.child('book').push().key;
-
-                        dbRef.child('book/' + newBookKey).set({
-                            name: req.body.name,
-                            recipes: req.body.recipes,
-                            author: req.body.uid,
-                            default: false
-                        });
-
-                        dbRef.child('user/' + req.body.uid + '/other').update({
-                            [newBookKey]: newBookKey
-                        });
-
-                        res.end(`Book created.`);
+                response
+                    .then(data => {
+                        res.end(JSON.stringify(data));
                     })
-                    .catch( err => {
-                        res.end(`POST request create book: User authentication`
-                            + ` failed.`);
-                    });  
+                    .catch(error => {
+                        res.end(JSON.stringify(error));
+                    })
             }
         })
         .delete((req, res) => {
@@ -117,37 +106,15 @@ const routes = (admin, dbRef) => {
              * }
              */
 
-            admin.auth().getUser(req.body.uid)
-            .then(val => {
-                const newFavoriteKey = dbRef.child('book').push().key;
-                const newPersonalBookKey = dbRef.child('book').push().key;
+            const response = bookModel.createNewUserBook(req.body.uid);
 
-                dbRef.child('book/' + newFavoriteKey).set({
-                    name: "Favorite",
-                    recipes: [],
-                    author: req.body.uid,
-                    default: true
-                });
-
-                dbRef.child('book/' + newPersonalBookKey).set({
-                    name: "My Book",
-                    recipes: [],
-                    author: req.body.uid,
-                    default: true
-                });
-            
-                dbRef.child('user/' + req.body.uid).set({
-                    favorite: newFavoriteKey,
-                    personal: newPersonalBookKey,
-                    other: []
+            response
+                .then(data => {
+                    res.end(JSON.stringify(data));
                 })
-            
-                res.end(`User bookshelf has been setup.`);
-            })
-            .catch(err => {
-                console.log(err.message);
-                res.end(`POST request create user: User authentication failed.`);
-            });
+                .catch(error => {
+                    res.end(JSON.stringify(error));
+                })
         });
 
     Router.route('/book/user')
@@ -159,10 +126,12 @@ const routes = (admin, dbRef) => {
              * }
              */
 
-            dbRef.child('user/' + req.body.uid).once('value')
-                .then(snap => {
-                    res.end(JSON.stringify(snap.val()));
-                });
+            const response = bookModel.getUserBook(req.body.uid);
+
+            response
+                .then(data => {
+                    res.end(JSON.stringify(data));
+                })
         });
 
     Router.route('/book/recipe')
@@ -175,16 +144,18 @@ const routes = (admin, dbRef) => {
              * }
              */
 
-            var data = {};
+            const response = bookModel.addRecipeToBook(req.body.book_id, 
+                req.body.recipes);
+            
+            response
+                .then(data => {
+                    res.end(JSON.stringify(data));
+                })
+                .catch(error => {
+                    res.end(JSON.stringify(error));
+                })
 
-            req.body.recipes.forEach(recipeId => {
-                data[`${recipeId}`] = recipeId;
             })
-
-            dbRef.child('book/' + req.body.book_id + '/recipes').update(data);
-
-            res.end(JSON.stringify({message: `user added recipes to book.`}));
-        })
         .delete((req, res) => {
              /**
              * req.body 
@@ -194,7 +165,16 @@ const routes = (admin, dbRef) => {
              * }
              */
 
-            dbRef.child('book/' + req.body.book_id + '/' + req.body.recipesId).remove();
+            const response = bookModel.deleteRecipeFromBook(req.body.book_id,
+                req.body.recipeId);
+
+            response
+                .then(data => {
+                    res.end(JSON.stringify(data));
+                })
+                .catch(error => {
+                    res.end(JSON.stringify(error));
+                })
         })
 
     
