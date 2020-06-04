@@ -1,12 +1,10 @@
 const express = require('express');
 const request = require('../js/request');
 const fs = require('fs');
+const recipeModel = require('../model/recipeModel');
 
-const routes = (admin, dbRef) => {
+const routes = () => {
     const Router = express.Router();
-
-    const in_RAW = fs.readFileSync('./src/file/ingredients.json', 'utf8');
-    const ingredient_list = JSON.parse(in_RAW);
 
     Router.route('/recipe/recommended')
         .get((req, res) => {
@@ -84,28 +82,38 @@ const routes = (admin, dbRef) => {
              */
             
             if (!req.body.uid) {
-                res.end(JSON.stringify({message: `Request body format incorrect: uid not found.`}));
+
+                res.end(JSON.stringify({
+                    message: `Request body format incorrect: uid not found.`
+                }));
 
             } else if (!req.body.book_id) {
 
-                res.end(JSON.stringify({message: `Request body format incorrect: book_id not found.`}));
+                res.end(JSON.stringify({
+                    message: `Request body format incorrect: `
+                                + `book_id not found.`
+                }));
 
             } else if (!req.body.recipe_id) {
                 
-                res.end(JSON.stringify({message: `Request body format incorrect: recipe_id not found.`}));
+                res.end(JSON.stringify({
+                    message: `Request body format incorrect: `
+                                + `recipe_id not found.`
+                }));
 
             } else {
 
-                admin.auth().getUser(req.body.uid)
-                    .then(userRecord => {
+                const response = recipeModel.deleteRecipeFromBook(req.body.uid, 
+                    req.body.book_id,
+                    req.body.recipe_id);
 
-                        const book_id = req.body.book_id;
-                        const recipe_id = req.body.recipe_id;
-
-                        dbRef.child(`book/${book_id}/recipes/${recipe_id}`).remove();
-
-                        res.end(JSON.stringify({message:`User removed recipe from book.`}));
-                    });
+                response
+                    .then(data => {
+                        res.end(JSON.stringify(data));
+                    })
+                    .catch(error => {
+                        res.end(JSON.stringify(error));
+                    })
             }
         });
 
@@ -117,7 +125,6 @@ const routes = (admin, dbRef) => {
              *      "uid": string
              *      "name": string,
              *      "ingredients": string[],
-             *      "categories": string[],
              *      "steps": string[],
              *      "image": string,
              *      "author": string,
@@ -154,58 +161,14 @@ const routes = (admin, dbRef) => {
                 res.end(`Request body format incorrect: editor not found.`);
 
             } else {
-
-                admin.auth().getUser(req.body.uid)
-                .then(userRecord => {
-                    const newRecipeKey = dbRef.child('recipe').push().key;
-
-                    var newRecipe = req.body;
-                    var tags = [];
-                    var tagsUpdate = {};
-
-                    console.log(req.body.ingredients);
-
-                    Object.keys(ingredient_list).forEach(key => {
-                        ingredient_list[key].forEach(item => {
-                            req.body.ingredients.forEach(in_item => {
-                                if (in_item === item) {
-                                    tags.push(key);
-                                    tagsUpdate[key + '/' + newRecipeKey] = 
-                                        newRecipeKey;
-                                }
-                            });
-                        });
-                    });
-
-                    /** Update ingredient data structure */
-                    dbRef.child('ingredient').update(tagsUpdate);
-
-                    /** Add tags to the newRecipe */
-                    newRecipe['tags'] = tags;
-
-                    /** Upload the new recipe */
-                    dbRef.child('recipe/' + newRecipeKey ).set(newRecipe);
-
-                    dbRef.child('user/' + req.body.uid + '/personal')
-                        .once('value').then(snap => {
-                            const bookId = snap.val();
-
-                            dbRef.child('book/' + bookId + '/recipes').update({
-                                [newRecipeKey]: newRecipeKey
-                            })
-                        });
-                
-
-                    res.end(JSON.stringify({
-                        recipe_id: newRecipeKey,
-                        message: "User created a recipe."
-                    }));
-                })
-                .catch(err => {
-                    console.log(err.message);
-                    res.end(`POST request create recipe: User authentication `
-                        + `failed.`);
-                });
+                const response = recipeModel.createRecipe(req.body);
+                response
+                    .then(data => {
+                        res.end(JSON.stringify(data));
+                    })
+                    .catch(error => {
+                        res.end(JSON.stringify(error));
+                    })
             }
         })
         .put((req, res) => {
@@ -226,36 +189,15 @@ const routes = (admin, dbRef) => {
             } else if (!req.body.recipe_id) {
                 res.end(`Request body format incorrect: recipe not found.`);
             } else {
-
-                admin.auth().getUser(req.body.uid)
-                    .then(val => {
-                        var updates = {};
-
-                        if (req.body.name && req.body.name !== '')
-                            updates[req.body.recipe_id + '/name'] 
-                                = req.body.name;
-
-                        if (req.body.categories 
-                                && req.body.categories.length !== 0 )
-                            updates[req.body.recipe_id + '/categories'] 
-                                = req.body.categories;
-                        
-                        if (req.body.steps && req.body.steps.length !== 0 )
-                            updates[req.body.recipe_id + '/steps'] 
-                                = req.body.steps;
-
-                        if (req.body.image && req.body.image !== '')
-                            updates[req.body.recipe_id + '/image'] 
-                                = req.body.image;
-
-                        dbRef.child('recipe').update(updates);
-
-                        res.end(`User edited a recipe.`);
+                const response = recipeModel.updateRecipe(req.body);
+                
+                reponse
+                    .then(data => {
+                        res.end(JSON.stringify(data));
                     })
-                    .catch(err => {
-                        console.log(err.message);
-                        res.end(`PUT request edit: User authentication failed.`);
-                });    
+                    .cathc(error => {
+                        res.end(JSON.stringify(error));
+                    })
             }
         })
         .delete((req, res) => {
