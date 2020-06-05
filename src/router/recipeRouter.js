@@ -109,10 +109,10 @@ const routes = () => {
 
                 response
                     .then(data => {
-                        res.end(JSON.stringify(data));
+                        res.end(JSON.stringify({message: data}));
                     })
                     .catch(error => {
-                        res.end(JSON.stringify(error));
+                        res.end(JSON.stringify({message: error}));
                     })
             }
         });
