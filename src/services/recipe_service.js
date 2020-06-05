@@ -4,12 +4,12 @@ const recipeServiceRouter = require('./router/recipeRouter');
 const fs = require('fs');
 
 /** Initialize firebase admin */
-const securedPath = './fudbook-b3184-firebase-adminsdk-oj6pw-e9861767b6.json';
+const securedPath = './fudbook-5e7edf-firebase-adminsdk-20jr7-73e9a6e404.json';
 const serviceAccount = JSON.parse(fs.readFileSync(securedPath, 'utf8'));
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://fudbook-b3184.firebaseio.com"
+  databaseURL: "https://fudbook-5e7edf.firebaseio.com"
 });
 
 /** Initialize app */
