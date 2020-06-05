@@ -65,27 +65,24 @@ const include = (ingredients, recipes, include_filter) => {
 const exclude = (ingredients, recipeList, exclude_filter) => {
     var ingr;
     var recipeNum;
+    var validList = {};
    
     //remove recipes with any ingredients in exclude_filter
     for(var i=0; i<exclude_filter.length; i++)
     {
       ingr = exclude_filter[i];
-      //get list of recipes that contains this specific ingredient to exclude
-      const excludeList = ingredients[ingr];
-      const values = Object.values(excludeList);
-      const excludeArr = values.map(String);
-      const validList = {};
+
       //find valid recipes in recipeList and remove invalid ones
-      for(var key in recipeList)
-      {
-        //if recipe is not found in exclude recipes then it is valid
-        if(!(excludeArr.indexOf(key) > -1))
-        {
-          validList[key] = recipeList[key];
-        }
-      }
-      recipeList = validList;
+      Object.keys(recipeList).forEach(recipeKey => {
+
+        recipeList[recipeKey].tags.forEach(item => {
+          if (item !== ingr)
+            validList[recipeKey] = recipeList[recipeKey];
+        })
+      })
     }
+
+    recipeList = validList;
 
     return recipeList;
 }

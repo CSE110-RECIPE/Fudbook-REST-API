@@ -21,8 +21,10 @@ const routes = (dbRef, container) => {
     
         // the algorithm returns matching key value and element.
     
-         var newRecipe = filter(container.ingredient, container.recipe,
+        var newRecipe = filter(container.ingredient, container.recipe,
             req.body.include_filter, req.body.exclude_filter);
+
+        console.log(newRecipe);
     
         res.end(JSON.stringify(newRecipe));
       });
